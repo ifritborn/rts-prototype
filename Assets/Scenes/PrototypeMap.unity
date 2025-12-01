@@ -8222,19 +8222,11 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 9c897440664033e428c95976992966ad, type: 2}
   - m_RefCount: 120
     m_Data: {fileID: 11400000, guid: 1856adb29b20d5a429a5f3c0b1a42adb, type: 2}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
   m_TileSpriteArray:
   - m_RefCount: 680
     m_Data: {fileID: 462641370, guid: 0d35488667633d340aa8276a0bee7d99, type: 3}
   - m_RefCount: 120
     m_Data: {fileID: 21300000, guid: 3c246881b9f6ca1419ae6d373d3c24c6, type: 3}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
   m_TileMatrixArray:
   - m_RefCount: 800
     m_Data:
@@ -8261,7 +8253,7 @@ Tilemap:
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -20, y: -10, z: 0}
-  m_Size: {x: 41, y: 20, z: 1}
+  m_Size: {x: 40, y: 20, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
   m_TileOrientation: 0
   m_TileOrientationMatrix:
@@ -8431,6 +8423,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c593e648f000ce4dba464605487f232, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  tilemap: {fileID: 92219315}
+  mapPadding: 1
+  panThresholdPercent: 20
+  cameraSpeedMouse: 10
+  cameraSpeedKeyBoard: 10
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
