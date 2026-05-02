@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Building : MonoBehaviour
@@ -6,6 +7,17 @@ public class Building : MonoBehaviour
     [SerializeField] private bool isBase;
     [SerializeField] private int maxHp;
     private int currentHealth;
+
+    public Vector3 POS;
+
+    public event Action BaseIsDead;
+
+    void Start()
+    {
+        POS = transform.position;
+        Debug.Log("Building: base pos = " + POS);
+        currentHealth = maxHp;
+    }
 
     private void deathHandler()
     {
@@ -17,14 +29,18 @@ public class Building : MonoBehaviour
         else
         {
             // emit base destroyed event to game manager
+            BaseIsDead?.Invoke();
+            Debug.Log("Building: Death Event Triggered");
+
         }
     }
     public void takeDamage(int dmgVal)
     {
-        
+
         int updatedHp = currentHealth - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHealth = hpBounds;
+        Debug.Log("Building: taking dmg, hp at "+currentHealth);
 
         if (currentHealth == 0)
         {
@@ -35,13 +51,10 @@ public class Building : MonoBehaviour
 
     private void OnDestroy()
     {
-        
+
 
     }
 
-    void Start()
-    {
-        currentHealth = maxHp;
-    }
+
 
 }

@@ -71,7 +71,6 @@ public class CameraManager : MonoBehaviour
         botBumper = UDThresh;
 
 
-
         // Establish map bounds
         bounds = tilemap.localBounds;
 
