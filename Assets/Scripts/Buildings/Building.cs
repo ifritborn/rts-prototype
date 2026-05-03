@@ -8,14 +8,11 @@ public class Building : MonoBehaviour
     [SerializeField] private int maxHp;
     private int currentHealth;
 
-    public Vector3 POS;
 
     public event Action BaseIsDead;
 
     void Start()
     {
-        POS = transform.position;
-        Debug.Log("Building: base pos = " + POS);
         currentHealth = maxHp;
     }
 

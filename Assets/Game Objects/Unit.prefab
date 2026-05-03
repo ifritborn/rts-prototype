@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2876370320415826759}
   - component: {fileID: 3170330690047174872}
   m_Layer: 0
-  m_Name: PlayerUnit
+  m_Name: Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.023584902, g: 1, b: 0.16047704, a: 1}
+  m_Color: {r: 0, g: 0.99607843, b: 0.03427411, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -179,4 +179,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14a61caa5a73234286d50dc50a29d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
-  enemyBase: {fileID: 0}

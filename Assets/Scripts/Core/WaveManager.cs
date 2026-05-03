@@ -1,21 +1,25 @@
-using System.Collections;
+using System;
 using UnityEditor.UI;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    [SerializeField] Unit playerUnits;
+
     [SerializeField] GameManager GM;
+    [SerializeField] private Building playerBase;
+    [SerializeField] private Building enemyBase;
 
-    private int spawnCount = 1;
+    [SerializeField] Spawner p_spawner;
+    [SerializeField] Spawner e_spawner;
 
-    private Vector3 playerSpawnPos;
-    private Quaternion playerSpawnRotation;
+    public event Action NextWave;
+
+
 
     void Start()
     {
-        playerSpawnPos = transform.position;
-        playerSpawnRotation = transform.rotation;
+        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color);
+        e_spawner.Initialize(playerBase, enemyBase.GetComponent<SpriteRenderer>().color);
         GM.GameStateChange += GameStateChangeHandler;
         GameStateChangeHandler(GM.getGameState());
 
@@ -28,39 +32,22 @@ public class WaveManager : MonoBehaviour
 
     private void GameStateChangeHandler(GameManager.GameState state)
     {
-        Debug.Log("WaveManager: Got here");
         if (state == GameManager.GameState.GameStart)
         {
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
+
         }
         else if (state == GameManager.GameState.GameInProgress)
         {
-            Debug.Log("WaveManager: Got here");
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
-            StartCoroutine(SpawnUnit());
+
+            NextWave?.Invoke();
         }
         else if (state == GameManager.GameState.GameEnd)
         {
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
             GM.GameStateChange -= GameStateChangeHandler;
         }
     }
 
-    IEnumerator SpawnUnit()
-    {
-        while (spawnCount > 0)
-        {
-            
-            if (GM.getGameState() == GameManager.GameState.GameInProgress)
-            {
-                Debug.Log("WaveManager: SpawnUnit(): spawnCount: " + spawnCount);
-                Instantiate(playerUnits, playerSpawnPos, playerSpawnRotation);
-                
-            }
-            yield return new WaitForSeconds(1f);
-            spawnCount -= 1;
-        }
-    }
+
 
 
 

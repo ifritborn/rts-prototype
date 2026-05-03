@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     GameState CurrentGameState;
 
-    // [SerializeField] private Building playerBase;
+    [SerializeField] private Building playerBase;
     [SerializeField] private Building enemyBase;
 
     public event Action<GameState> GameStateChange;
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("GM: Awake - gamestate = " + getGameState());
         setGameState(GameState.GameStart);
 
-        // playerBase.BaseIsDead += EndGame;
+        playerBase.BaseIsDead += EndGame;
         enemyBase.BaseIsDead += EndGame;
     }
     void Start()
@@ -34,11 +34,6 @@ public class GameManager : MonoBehaviour
         Debug.Log("GM: Start - gamestate = " + getGameState());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public GameState getGameState()
     {
@@ -54,7 +49,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("GM: EndGame() called");
         setGameState(GameState.GameEnd);
-        // playerBase.BaseIsDead -= EndGame;
+        playerBase.BaseIsDead -= EndGame;
         enemyBase.BaseIsDead -= EndGame;
         Debug.Log("GM: Change Sceen Needed Here Eventually");
         // TODO: This logic should not make it into a build

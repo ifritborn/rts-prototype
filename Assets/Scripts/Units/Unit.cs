@@ -5,51 +5,42 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    
-    [SerializeField] private Building enemyBase;
-    private Vector3 targetPOS; 
+
+    private Transform targetPOS;
 
     private bool isMoving;
 
     private bool isAttacking;
     private float unitMvSpd = 1f;
     private float unitAtkSpd = 1.5f;
-    private float mtime;
+    
+
+    public void Initialize(Transform pos, Color spriteColor)
+    {
+        this.targetPOS = pos;
+        this.GetComponent<SpriteRenderer>().color = spriteColor;
+    }
 
     void Start()
     {
-        setEnemyBasePOS();
         isMoving = true;
         isAttacking = false;
     }
 
-
-
-    void setEnemyBasePOS()
+    void Update()
     {
-        
-        Debug.Log("Unit: enemyBase = " + enemyBase);
-        if(enemyBase != null)
-        {
-            this.targetPOS = enemyBase.POS;
-            Debug.Log("Unit: target base at pos: " + targetPOS);
-        }
-        else
-        {
-            Debug.Log("Unit: Bulding script not found");
-        }
+        move();
     }
+
 
     void move()
     {
-        Vector3 moveDelta = Vector3.right * unitMvSpd * mtime;
-        Vector3 newPos = transform.position + moveDelta;
-        transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
+        transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
     }
 
     void getTarget()
     {
-        
+
     }
 
     IEnumerator attack(Building target)
@@ -88,16 +79,12 @@ public class Unit : MonoBehaviour
         {
             isMoving = true;
             unitMvSpd = 1;
-        } 
-   
+        }
+
     }
 
 
 
 
-    void Update()
-    {
-        mtime = Time.deltaTime;
-        move();
-    }
+
 }
