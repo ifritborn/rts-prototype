@@ -69,4 +69,11 @@
     },
     "dotnet.defaultSolution": "rts-prototype.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
+        "*.unity": "yaml"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.sln": "*.csproj"
+    },
+    "dotnet.defaultSolution": "rts-prototype.slnx"
 }
