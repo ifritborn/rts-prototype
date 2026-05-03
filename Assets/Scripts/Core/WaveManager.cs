@@ -17,7 +17,8 @@ public class WaveManager : MonoBehaviour
         playerSpawnPos = transform.position;
         playerSpawnRotation = transform.rotation;
         GM.GameStateChange += GameStateChangeHandler;
-        
+        GameStateChangeHandler(GM.getGameState());
+
     }
 
     void Update()
@@ -27,12 +28,14 @@ public class WaveManager : MonoBehaviour
 
     private void GameStateChangeHandler(GameManager.GameState state)
     {
+        Debug.Log("WaveManager: Got here");
         if (state == GameManager.GameState.GameStart)
         {
             Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
         }
         else if (state == GameManager.GameState.GameInProgress)
         {
+            Debug.Log("WaveManager: Got here");
             Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
             StartCoroutine(SpawnUnit());
         }
