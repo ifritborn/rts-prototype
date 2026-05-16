@@ -3,28 +3,38 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, IDamagable
 {
 
     private Transform targetPOS;
-
     private bool isMoving;
-
     private bool isAttacking;
+
+    [SerializeField] private int maxHp;
+    private int currentHealth;
+
+
     private float unitMvSpd = 1f;
     private float unitAtkSpd = 1.5f;
-    
+    private Team team;
 
-    public void Initialize(Transform pos, Color spriteColor)
+
+
+
+
+    public void Initialize(Transform pos, Color spriteColor, Team team)
     {
         this.targetPOS = pos;
         this.GetComponent<SpriteRenderer>().color = spriteColor;
+        this.team = team;
     }
 
     void Start()
     {
+        currentHealth = maxHp;
         isMoving = true;
         isAttacking = false;
+
     }
 
     void Update()
@@ -32,6 +42,13 @@ public class Unit : MonoBehaviour
         move();
     }
 
+
+
+
+    public Team getTeam()
+    {
+        return this.team;
+    }
 
     void move()
     {
@@ -43,16 +60,16 @@ public class Unit : MonoBehaviour
 
     }
 
-    IEnumerator attack(Building target)
+    IEnumerator AttackTarget(IDamagable target)
     {
         isAttacking = true;
 
-        Debug.Log("Unit: attacking: " + target.gameObject.name);
+        Debug.Log("Unit: attacking: " + target);
 
         while (target != null)
         {
             Debug.Log("Unit: swinging on target");
-            target.takeDamage(100);
+            target.TakeDamage(100);
 
             yield return new WaitForSeconds(unitAtkSpd);
         }
@@ -60,8 +77,20 @@ public class Unit : MonoBehaviour
         isAttacking = false;
     }
 
+    private bool CanAttackTarget(IDamagable target)
+    {
+        bool CanAttack = false;
+        if (target.getTeam() != this.team)
+        {
+            CanAttack = true;
+        }
+
+        return CanAttack;
+    }
+
     void OnCollisionEnter2D(Collision2D target)
     {
+        IDamagable t = target.gameObject.GetComponent<IDamagable>();
         Debug.Log("Unit: coliding with: " + target.gameObject.name);
         if (isMoving)
         {
@@ -69,7 +98,14 @@ public class Unit : MonoBehaviour
             unitMvSpd = 0;
         }
 
-        StartCoroutine(attack(target.gameObject.GetComponent<Building>()));
+        bool CanAttack = CanAttackTarget(t);
+        Debug.Log("Unit: can I attack? " + CanAttack);
+
+        if (CanAttack)
+        {
+            StartCoroutine(AttackTarget(t));
+        }
+
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -84,7 +120,26 @@ public class Unit : MonoBehaviour
     }
 
 
+    public void TakeDamage(int dmgVal)
+    {
 
+        int updatedHp = currentHealth - dmgVal;
+        int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
+        currentHealth = hpBounds;
+        Debug.Log("Unit: dmg - hp at: " + currentHealth);
 
+        if (currentHealth == 0)
+        {
+            DeathHandler();
+        }
 
+    }
+
+    private void DeathHandler()
+    {
+        // unit destroyed logic 
+        Destroy(gameObject);
+        Debug.Log("Unit Death");
+
+    }
 }

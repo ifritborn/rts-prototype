@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
+    
+   
 
     [SerializeField] GameManager GM;
     [SerializeField] private Building playerBase;
@@ -12,14 +14,19 @@ public class WaveManager : MonoBehaviour
     [SerializeField] Spawner p_spawner;
     [SerializeField] Spawner e_spawner;
 
+    
     public event Action NextWave;
 
 
 
     void Start()
     {
-        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color);
-        e_spawner.Initialize(playerBase, enemyBase.GetComponent<SpriteRenderer>().color);
+        playerBase.Initialize(Team.Player);
+        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color, p_spawner.transform, Team.Player, 10);
+
+        enemyBase.Initialize(Team.Opponent);
+        e_spawner.Initialize(playerBase, enemyBase.GetComponent<SpriteRenderer>().color, e_spawner.transform, Team.Opponent, 5);
+
         GM.GameStateChange += GameStateChangeHandler;
         GameStateChangeHandler(GM.getGameState());
 
