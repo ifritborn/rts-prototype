@@ -7,14 +7,21 @@ public class Spawner : MonoBehaviour
     [SerializeField] Unit unitPrefab;
     private Building opposingBase;
     private Color teamColor;
-    private int spawnCount = 1;
+    private int spawnCount;
     private Vector3 SpawnPos;
     private Quaternion SpawnRotation;
+    private Team team;
 
-    public void Initialize(Building opposingBase, Color teamColor)
+
+
+    public void Initialize(Building opposingBase, Color teamColor, Transform tform, Team team, int spawncount)
     {
         this.opposingBase = opposingBase;
         this.teamColor = teamColor;
+        this.SpawnPos = tform.position;
+        this.SpawnRotation = tform.rotation;
+        this.team = team;
+        this.spawnCount = spawncount;
     }
     void Awake()
     {
@@ -24,8 +31,6 @@ public class Spawner : MonoBehaviour
 
     void Start()
     {
-        SpawnPos = transform.position;
-        SpawnRotation = transform.rotation;
     }
 
     void SpawnWave()
@@ -38,11 +43,9 @@ public class Spawner : MonoBehaviour
     {
         while (spawnCount > 0)
         {
-            Debug.Log("Spawner: SpawnUnit(): spawnCount: " + spawnCount);
-            Debug.Log("Spawner: opposingBase = " + opposingBase);
             var newUnit = Instantiate(unitPrefab, SpawnPos, SpawnRotation);
             var unitScript = newUnit.GetComponent<Unit>();
-            unitScript.Initialize(opposingBase.transform, teamColor);
+            unitScript.Initialize(opposingBase.transform, teamColor, team);
             yield return new WaitForSeconds(1f);
             spawnCount -= 1;
         }

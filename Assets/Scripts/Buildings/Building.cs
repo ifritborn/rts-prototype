@@ -1,22 +1,32 @@
 using System;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : MonoBehaviour, IDamagable
 {
 
     [SerializeField] private bool isBase;
     [SerializeField] private int maxHp;
     private int currentHealth;
-
+    private Team team;
 
     public event Action BaseIsDead;
+
+    public void Initialize(Team team)
+    {
+        this.team = team;
+    }
+
+    public Team getTeam()
+    {
+        return this.team;
+    }
 
     void Start()
     {
         currentHealth = maxHp;
     }
 
-    private void deathHandler()
+    private void DeathHandler()
     {
         if (!isBase)
         {
@@ -31,17 +41,17 @@ public class Building : MonoBehaviour
 
         }
     }
-    public void takeDamage(int dmgVal)
+    public void TakeDamage(int dmgVal)
     {
 
         int updatedHp = currentHealth - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHealth = hpBounds;
-        Debug.Log("Building: taking dmg, hp at "+currentHealth);
+        Debug.Log("Building: taking dmg, hp at " + currentHealth);
 
         if (currentHealth == 0)
         {
-            deathHandler();
+            DeathHandler();
         }
 
     }
