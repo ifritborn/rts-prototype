@@ -8599,6 +8599,7 @@ MonoBehaviour:
   enemyBase: {fileID: 1061672542}
   p_spawner: {fileID: 1770420013}
   e_spawner: {fileID: 586238516}
+  timerInterval: 15
 --- !u!4 &946576484
 Transform:
   m_ObjectHideFlags: 0

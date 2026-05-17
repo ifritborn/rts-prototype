@@ -8,6 +8,7 @@ public class Building : MonoBehaviour, IDamagable
     [SerializeField] private int maxHp;
     private int currentHealth;
     private Team team;
+    private bool isAlive;
 
     public event Action BaseIsDead;
 
@@ -21,9 +22,15 @@ public class Building : MonoBehaviour, IDamagable
         return this.team;
     }
 
+    public bool getIsAlive()
+    {
+        return this.isAlive;
+    }
+
     void Start()
     {
         currentHealth = maxHp;
+        this.isAlive = true;
     }
 
     private void DeathHandler()
@@ -35,7 +42,8 @@ public class Building : MonoBehaviour, IDamagable
         }
         else
         {
-            // emit base destroyed event to game manager
+            // emit base destroyed event to game manager3
+            this.isAlive = false;
             BaseIsDead?.Invoke();
             Debug.Log("Building: Death Event Triggered");
 
@@ -49,7 +57,7 @@ public class Building : MonoBehaviour, IDamagable
         currentHealth = hpBounds;
         Debug.Log("Building: taking dmg, hp at " + currentHealth);
 
-        if (currentHealth == 0)
+        if (currentHealth == 0 && this.isAlive == true)
         {
             DeathHandler();
         }

@@ -14,14 +14,15 @@ public class Spawner : MonoBehaviour
 
 
 
-    public void Initialize(Building opposingBase, Color teamColor, Transform tform, Team team, int spawncount)
+    public void Initialize(Building opposingBase, Color teamColor, Transform tform, Team team, int spawnCount)
     {
         this.opposingBase = opposingBase;
         this.teamColor = teamColor;
         this.SpawnPos = tform.position;
         this.SpawnRotation = tform.rotation;
         this.team = team;
-        this.spawnCount = spawncount;
+        this.spawnCount = spawnCount;
+
     }
     void Awake()
     {
@@ -41,13 +42,15 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnUnit()
     {
-        while (spawnCount > 0)
+        for (int i = 0; i < spawnCount; i++)
         {
-            var newUnit = Instantiate(unitPrefab, SpawnPos, SpawnRotation);
+            float spread = Random.Range(-.25f, .25f);
+            Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);
+            var newUnit = Instantiate(unitPrefab, SpreadSpawnPos, SpawnRotation);
+            newUnit.name = $"{team} Unit";
             var unitScript = newUnit.GetComponent<Unit>();
             unitScript.Initialize(opposingBase.transform, teamColor, team);
-            yield return new WaitForSeconds(1f);
-            spawnCount -= 1;
+            yield return new WaitForSeconds(.01f);
         }
     }
 }

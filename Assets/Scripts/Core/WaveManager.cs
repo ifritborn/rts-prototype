@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
 using UnityEditor.UI;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    
-   
+
+
 
     [SerializeField] GameManager GM;
     [SerializeField] private Building playerBase;
@@ -14,7 +15,11 @@ public class WaveManager : MonoBehaviour
     [SerializeField] Spawner p_spawner;
     [SerializeField] Spawner e_spawner;
 
-    
+    [SerializeField] float timerInterval;
+
+    private GameManager.GameState state;
+
+
     public event Action NextWave;
 
 
@@ -22,7 +27,7 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         playerBase.Initialize(Team.Player);
-        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color, p_spawner.transform, Team.Player, 10);
+        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color, p_spawner.transform, Team.Player, 5);
 
         enemyBase.Initialize(Team.Opponent);
         e_spawner.Initialize(playerBase, enemyBase.GetComponent<SpriteRenderer>().color, e_spawner.transform, Team.Opponent, 5);
@@ -39,19 +44,31 @@ public class WaveManager : MonoBehaviour
 
     private void GameStateChangeHandler(GameManager.GameState state)
     {
+        this.state = state;
         if (state == GameManager.GameState.GameStart)
         {
 
         }
         else if (state == GameManager.GameState.GameInProgress)
         {
+            StartCoroutine(WaveSystem(timerInterval));
 
-            NextWave?.Invoke();
         }
         else if (state == GameManager.GameState.GameEnd)
         {
             GM.GameStateChange -= GameStateChangeHandler;
         }
+    }
+
+    IEnumerator WaveSystem(float timerInterval)
+    {
+        while (this.state == GameManager.GameState.GameInProgress)
+        {
+            NextWave?.Invoke();
+            yield return new WaitForSeconds(timerInterval);
+        }
+
+
     }
 
 
