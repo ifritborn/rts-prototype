@@ -18,6 +18,8 @@ public class Unit : MonoBehaviour, IDamagable
     private float unitAtkSpd = 1.5f;
     private Team team;
 
+    private bool isAlive;
+
 
 
 
@@ -34,6 +36,7 @@ public class Unit : MonoBehaviour, IDamagable
         currentHealth = maxHp;
         isMoving = true;
         isAttacking = false;
+        isAlive = true;
 
     }
 
@@ -50,6 +53,11 @@ public class Unit : MonoBehaviour, IDamagable
         return this.team;
     }
 
+    public bool getIsAlive()
+    {
+        return this.isAlive;
+    }
+
     void move()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
@@ -64,14 +72,28 @@ public class Unit : MonoBehaviour, IDamagable
     {
         isAttacking = true;
 
-        Debug.Log("Unit: attacking: " + target);
-
         while (target != null)
         {
-            Debug.Log("Unit: swinging on target");
-            target.TakeDamage(100);
+            if (target.getIsAlive() == false)
+            {
+                if (!isMoving)
+                {
+                    isMoving = true;
+                    unitMvSpd = 1;
+                }
+                break;
+            }
+            else
+            {
+                if (isMoving)
+                {
+                    isMoving = false;
+                    unitMvSpd = 0;
+                }
+                target.TakeDamage(25);
+                yield return new WaitForSeconds(unitAtkSpd);
+            }
 
-            yield return new WaitForSeconds(unitAtkSpd);
         }
         Debug.Log("Unit: attack while loop over");
         isAttacking = false;
@@ -80,7 +102,7 @@ public class Unit : MonoBehaviour, IDamagable
     private bool CanAttackTarget(IDamagable target)
     {
         bool CanAttack = false;
-        if (target.getTeam() != this.team)
+        if (target.getTeam() != this.team && target.getIsAlive() == true)
         {
             CanAttack = true;
         }
@@ -92,11 +114,7 @@ public class Unit : MonoBehaviour, IDamagable
     {
         IDamagable t = target.gameObject.GetComponent<IDamagable>();
         Debug.Log("Unit: coliding with: " + target.gameObject.name);
-        if (isMoving)
-        {
-            isMoving = false;
-            unitMvSpd = 0;
-        }
+
 
         bool CanAttack = CanAttackTarget(t);
         Debug.Log("Unit: can I attack? " + CanAttack);
@@ -128,7 +146,7 @@ public class Unit : MonoBehaviour, IDamagable
         currentHealth = hpBounds;
         Debug.Log("Unit: dmg - hp at: " + currentHealth);
 
-        if (currentHealth == 0)
+        if (currentHealth == 0 && this.isAlive == true)
         {
             DeathHandler();
         }
@@ -138,6 +156,7 @@ public class Unit : MonoBehaviour, IDamagable
     private void DeathHandler()
     {
         // unit destroyed logic 
+        this.isAlive = false;
         Destroy(gameObject);
         Debug.Log("Unit Death");
 
