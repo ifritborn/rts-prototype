@@ -9,14 +9,11 @@ public class WaveManager : MonoBehaviour
     private GameStateManager GSM;
     private TeamController player;
     private TeamController ai;
-
     private Spawner pSpawner;
     private Spawner aiSpawner;
-
-    [SerializeField] float timerInterval;
-
+    private float timerInterval = 15f;
     private GameState state;
-
+    private int waveNumber;
 
     public event Action NextWave;
 
@@ -26,15 +23,10 @@ public class WaveManager : MonoBehaviour
         this.player = player;
         this.ai = ai;
 
+        waveNumber = 0;
         GSM.GameStateChange += GameStateChangeHandler;
         GameStateChangeHandler(GSM.getGameState());
     }
-
-    void Start()
-    {
-        
-    }
-
 
     private void GameStateChangeHandler(GameState state)
     {
@@ -59,6 +51,8 @@ public class WaveManager : MonoBehaviour
         while (this.state == GameState.GameInProgress)
         {
             NextWave?.Invoke();
+            waveNumber += 1;
+            Debug.Log("WM: wave num: " + waveNumber);
             yield return new WaitForSeconds(timerInterval);
         }
 

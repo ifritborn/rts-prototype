@@ -15,7 +15,7 @@ public class TeamController : MonoBehaviour
     public Building getBase()
     {
         return myBase;
-    } 
+    }
     public Spawner getSpawner()
     {
         return spawner;
@@ -42,16 +42,15 @@ public class TeamController : MonoBehaviour
         this.opposingBase = opposingBase;
         this.teamID = teamID;
 
-        spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
+        initializeComponents();
     }
 
-    void Awake()
+    private void initializeComponents()
     {
-        
+        spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
+        bank.Initialize(WM);
+
     }
 
-
-
-    // Base.GetComponent<SpriteRenderer>().color;
 
 }

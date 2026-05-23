@@ -95,7 +95,7 @@ public class Unit : MonoBehaviour, IDamagable
             }
 
         }
-        Debug.Log("Unit: attack while loop over");
+        // Debug.Log("Unit: attack while loop over");
         isAttacking = false;
     }
 
@@ -113,11 +113,11 @@ public class Unit : MonoBehaviour, IDamagable
     void OnCollisionEnter2D(Collision2D target)
     {
         IDamagable t = target.gameObject.GetComponent<IDamagable>();
-        Debug.Log("Unit: coliding with: " + target.gameObject.name);
+        // Debug.Log("Unit: coliding with: " + target.gameObject.name);
 
 
         bool CanAttack = CanAttackTarget(t);
-        Debug.Log("Unit: can I attack? " + CanAttack);
+        // Debug.Log("Unit: can I attack? " + CanAttack);
 
         if (CanAttack)
         {
@@ -128,7 +128,7 @@ public class Unit : MonoBehaviour, IDamagable
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("Unit: exiting collision");
+        // Debug.Log("Unit: exiting collision");
         if (!isMoving)
         {
             isMoving = true;
@@ -144,7 +144,7 @@ public class Unit : MonoBehaviour, IDamagable
         int updatedHp = currentHealth - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHealth = hpBounds;
-        Debug.Log("Unit: dmg - hp at: " + currentHealth);
+        // Debug.Log("Unit: dmg - hp at: " + currentHealth);
 
         if (currentHealth == 0 && this.isAlive == true)
         {
@@ -158,7 +158,7 @@ public class Unit : MonoBehaviour, IDamagable
         // unit destroyed logic 
         this.isAlive = false;
         Destroy(gameObject);
-        Debug.Log("Unit Death");
+        // Debug.Log("Unit Death");
 
     }
 }
