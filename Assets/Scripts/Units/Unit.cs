@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour, IDamagable
 
     private float unitMvSpd = 1f;
     private float unitAtkSpd = 1.5f;
-    private Team team;
+    private TeamID team;
 
     private bool isAlive;
 
@@ -24,7 +24,7 @@ public class Unit : MonoBehaviour, IDamagable
 
 
 
-    public void Initialize(Transform pos, Color spriteColor, Team team)
+    public void Initialize(Transform pos, Color spriteColor, TeamID team)
     {
         this.targetPOS = pos;
         this.GetComponent<SpriteRenderer>().color = spriteColor;
@@ -48,7 +48,7 @@ public class Unit : MonoBehaviour, IDamagable
 
 
 
-    public Team getTeam()
+    public TeamID getTeamID()
     {
         return this.team;
     }
@@ -102,7 +102,7 @@ public class Unit : MonoBehaviour, IDamagable
     private bool CanAttackTarget(IDamagable target)
     {
         bool CanAttack = false;
-        if (target.getTeam() != this.team && target.getIsAlive() == true)
+        if (target.getTeamID() != this.team && target.getIsAlive() == true)
         {
             CanAttack = true;
         }

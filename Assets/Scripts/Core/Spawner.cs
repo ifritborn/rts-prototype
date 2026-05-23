@@ -3,35 +3,27 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] WaveManager waveManager;
+    
     [SerializeField] Unit unitPrefab;
+    private WaveManager WM;
     private Building opposingBase;
     private Color teamColor;
-    private int spawnCount;
     private Vector3 SpawnPos;
     private Quaternion SpawnRotation;
-    private Team team;
+    private TeamID team;
 
 
 
-    public void Initialize(Building opposingBase, Color teamColor, Transform tform, Team team, int spawnCount)
+    public void Initialize(WaveManager WM, Building opposingBase, Color teamColor, Transform tform, TeamID team)
     {
+        this.WM = WM;
         this.opposingBase = opposingBase;
         this.teamColor = teamColor;
         this.SpawnPos = tform.position;
         this.SpawnRotation = tform.rotation;
         this.team = team;
-        this.spawnCount = spawnCount;
 
-    }
-    void Awake()
-    {
-        waveManager.NextWave += SpawnWave;
-    }
-
-
-    void Start()
-    {
+        WM.NextWave += SpawnWave;
     }
 
     void SpawnWave()
@@ -42,6 +34,7 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnUnit()
     {
+        int spawnCount = 5;
         for (int i = 0; i < spawnCount; i++)
         {
             float spread = Random.Range(-.25f, .25f);

@@ -7,19 +7,19 @@ public class Building : MonoBehaviour, IDamagable
     [SerializeField] private bool isBase;
     [SerializeField] private int maxHp;
     private int currentHealth;
-    private Team team;
+    private TeamID teamID;
     private bool isAlive;
 
     public event Action BaseIsDead;
 
-    public void Initialize(Team team)
+    public void Initialize(TeamID teamID)
     {
-        this.team = team;
+        this.teamID = teamID;
     }
 
-    public Team getTeam()
+    public TeamID getTeamID()
     {
-        return this.team;
+        return this.teamID;
     }
 
     public bool getIsAlive()

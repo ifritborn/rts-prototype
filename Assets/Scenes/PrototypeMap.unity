@@ -8446,7 +8446,7 @@ GameObject:
   - component: {fileID: 586238515}
   - component: {fileID: 586238516}
   m_Layer: 0
-  m_Name: e_spawner
+  m_Name: AISpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8565,6 +8565,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &674641096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 674641097}
+  m_Layer: 0
+  m_Name: TeamControllerPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &674641097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674641096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.41878, y: -0.12184, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &946576482
 GameObject:
   m_ObjectHideFlags: 0
@@ -8615,6 +8646,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1007125032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1007125033}
+  m_Layer: 0
+  m_Name: TeamControllerAI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1007125033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1007125032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -11.41878, y: -0.12184, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1061672539
 GameObject:
   m_ObjectHideFlags: 0
@@ -8629,7 +8691,7 @@ GameObject:
   - component: {fileID: 1061672544}
   - component: {fileID: 1061672542}
   m_Layer: 0
-  m_Name: enemy base
+  m_Name: AIBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8853,7 +8915,7 @@ GameObject:
   - component: {fileID: 1770420012}
   - component: {fileID: 1770420013}
   m_Layer: 0
-  m_Name: p_spawner
+  m_Name: PlayerSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8947,7 +9009,7 @@ GameObject:
   - component: {fileID: 2005741908}
   - component: {fileID: 2005741907}
   m_Layer: 0
-  m_Name: player base
+  m_Name: PlayerBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9122,8 +9184,10 @@ SceneRoots:
   - {fileID: 946576484}
   - {fileID: 519420032}
   - {fileID: 619394802}
+  - {fileID: 674641097}
   - {fileID: 2005741906}
-  - {fileID: 1061672541}
   - {fileID: 1770420012}
+  - {fileID: 1007125033}
+  - {fileID: 1061672541}
   - {fileID: 586238515}
   - {fileID: 1922043159}

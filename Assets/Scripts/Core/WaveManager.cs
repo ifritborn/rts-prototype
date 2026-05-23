@@ -6,63 +6,57 @@ using UnityEngine;
 public class WaveManager : MonoBehaviour
 {
 
+    private GameStateManager GSM;
+    private TeamController player;
+    private TeamController ai;
 
-
-    [SerializeField] GameManager GM;
-    [SerializeField] private Building playerBase;
-    [SerializeField] private Building enemyBase;
-
-    [SerializeField] Spawner p_spawner;
-    [SerializeField] Spawner e_spawner;
+    private Spawner pSpawner;
+    private Spawner aiSpawner;
 
     [SerializeField] float timerInterval;
 
-    private GameManager.GameState state;
+    private GameState state;
 
 
     public event Action NextWave;
 
+    public void Initialize(GameStateManager GSM, TeamController player, TeamController ai)
+    {
+        this.GSM = GSM;
+        this.player = player;
+        this.ai = ai;
 
+        GSM.GameStateChange += GameStateChangeHandler;
+        GameStateChangeHandler(GSM.getGameState());
+    }
 
     void Start()
     {
-        playerBase.Initialize(Team.Player);
-        p_spawner.Initialize(enemyBase, playerBase.GetComponent<SpriteRenderer>().color, p_spawner.transform, Team.Player, 5);
-
-        enemyBase.Initialize(Team.Opponent);
-        e_spawner.Initialize(playerBase, enemyBase.GetComponent<SpriteRenderer>().color, e_spawner.transform, Team.Opponent, 5);
-
-        GM.GameStateChange += GameStateChangeHandler;
-        GameStateChangeHandler(GM.getGameState());
-
+        
     }
 
-    void Update()
-    {
 
-    }
-
-    private void GameStateChangeHandler(GameManager.GameState state)
+    private void GameStateChangeHandler(GameState state)
     {
         this.state = state;
-        if (state == GameManager.GameState.GameStart)
+        if (state == GameState.GameStart)
         {
 
         }
-        else if (state == GameManager.GameState.GameInProgress)
+        else if (state == GameState.GameInProgress)
         {
             StartCoroutine(WaveSystem(timerInterval));
 
         }
-        else if (state == GameManager.GameState.GameEnd)
+        else if (state == GameState.GameEnd)
         {
-            GM.GameStateChange -= GameStateChangeHandler;
+            GSM.GameStateChange -= GameStateChangeHandler;
         }
     }
 
     IEnumerator WaveSystem(float timerInterval)
     {
-        while (this.state == GameManager.GameState.GameInProgress)
+        while (this.state == GameState.GameInProgress)
         {
             NextWave?.Invoke();
             yield return new WaitForSeconds(timerInterval);
