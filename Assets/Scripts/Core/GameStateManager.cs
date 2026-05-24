@@ -16,6 +16,7 @@ public class GameStateManager : MonoBehaviour
 
     public event Action<GameState> GameStateChange;
 
+    // ----------------------------------------------------------------------------------------------------------------
 
 
     void Awake()
@@ -29,11 +30,13 @@ public class GameStateManager : MonoBehaviour
     }
     void Start()
     {
-        
+
         player.Initialize(WM, aiBase, TeamID.Player);
         ai.Initialize(WM, playerBase, TeamID.AI);
         WM.Initialize(this, player, ai);
         HUD.Initialize(player);
+
+        ai.getSpawner().changeArmySize(-1);
 
 
         player.getBase().BaseIsDead += EndGame;
@@ -42,6 +45,8 @@ public class GameStateManager : MonoBehaviour
         setGameState(GameState.GameInProgress);
         Debug.Log("GM: Start - gamestate = " + getGameState());
     }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
 
     public GameState getGameState()

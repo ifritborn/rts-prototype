@@ -9368,6 +9368,7 @@ MonoBehaviour:
   player: {fileID: 674641098}
   ai: {fileID: 1007125034}
   WM: {fileID: 946576483}
+  HUD: {fileID: 852829196}
 --- !u!4 &1598505724
 Transform:
   m_ObjectHideFlags: 0

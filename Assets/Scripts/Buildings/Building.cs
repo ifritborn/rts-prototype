@@ -12,6 +12,9 @@ public class Building : MonoBehaviour, IDamagable
 
     public event Action BaseIsDead;
 
+    // ----------------------------------------------------------------------------------------------------------------
+
+
     public void Initialize(TeamID teamID)
     {
         this.teamID = teamID;
@@ -27,11 +30,22 @@ public class Building : MonoBehaviour, IDamagable
         return this.isAlive;
     }
 
+    // ----------------------------------------------------------------------------------------------------------------
+
+
     void Start()
     {
         currentHealth = maxHp;
         this.isAlive = true;
     }
+
+    private void OnDestroy()
+    {
+
+
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
     private void DeathHandler()
     {
@@ -64,11 +78,7 @@ public class Building : MonoBehaviour, IDamagable
 
     }
 
-    private void OnDestroy()
-    {
 
-
-    }
 
 
 

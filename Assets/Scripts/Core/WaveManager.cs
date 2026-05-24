@@ -17,6 +17,9 @@ public class WaveManager : MonoBehaviour
 
     public event Action NextWave;
 
+    // ----------------------------------------------------------------------------------------------------------------
+
+
     public void Initialize(GameStateManager GSM, TeamController player, TeamController ai)
     {
         this.GSM = GSM;
@@ -27,6 +30,9 @@ public class WaveManager : MonoBehaviour
         GSM.GameStateChange += GameStateChangeHandler;
         GameStateChangeHandler(GSM.getGameState());
     }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
 
     private void GameStateChangeHandler(GameState state)
     {

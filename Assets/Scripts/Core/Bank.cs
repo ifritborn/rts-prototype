@@ -14,6 +14,8 @@ public class Bank : MonoBehaviour
         return currentGold;
     }
 
+    // ----------------------------------------------------------------------------------------------------------------
+
     public void Initialize(WaveManager WM, TeamID teamID)
     {
         this.WM = WM;
@@ -24,6 +26,9 @@ public class Bank : MonoBehaviour
 
         WM.NextWave += waveIncomeHandler;
     }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
 
     private void waveIncomeHandler()
     {

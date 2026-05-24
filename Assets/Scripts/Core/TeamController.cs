@@ -11,6 +11,7 @@ public class TeamController : MonoBehaviour
     private Building opposingBase;
     private TeamID teamID;
 
+    // ----------------------------------------------------------------------------------------------------------------
 
     public Building getBase()
     {
@@ -35,6 +36,8 @@ public class TeamController : MonoBehaviour
         return opposingBase;
     }
 
+    // ----------------------------------------------------------------------------------------------------------------
+
     public void Initialize(WaveManager WM, Building opposingBase, TeamID teamID)
     {
         this.teamColor = myBase.GetComponent<SpriteRenderer>().color;
@@ -44,6 +47,8 @@ public class TeamController : MonoBehaviour
 
         initializeComponents();
     }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
     private void initializeComponents()
     {

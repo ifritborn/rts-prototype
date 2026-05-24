@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Spawner : MonoBehaviour
 {
-    
+
     [SerializeField] Unit unitPrefab;
     private WaveManager WM;
     private Building opposingBase;
@@ -13,10 +13,8 @@ public class Spawner : MonoBehaviour
     private TeamID team;
     private int armySize = 1;
 
-    public void changeArmySize(int num)
-    {
-        armySize += num;
-    }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
     public void Initialize(WaveManager WM, Building opposingBase, Color teamColor, Transform tform, TeamID team)
     {
@@ -28,6 +26,14 @@ public class Spawner : MonoBehaviour
         this.team = team;
 
         WM.NextWave += SpawnWave;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    public void changeArmySize(int num)
+    {
+        armySize += num;
     }
 
     void SpawnWave()

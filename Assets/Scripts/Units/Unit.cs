@@ -9,20 +9,31 @@ public class Unit : MonoBehaviour, IDamagable
     private Transform targetPOS;
     private bool isMoving;
     private bool isAttacking;
-
     [SerializeField] private int maxHp;
     private int currentHealth;
-
-
     private float unitMvSpd = 1f;
     private float unitAtkSpd = 1.5f;
     private TeamID team;
-
     private bool isAlive;
 
+    // ----------------------------------------------------------------------------------------------------------------
 
+    public TeamID getTeamID()
+    {
+        return this.team;
+    }
 
+    public bool getIsAlive()
+    {
+        return this.isAlive;
+    }
 
+        void getTarget()
+    {
+
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
     public void Initialize(Transform pos, Color spriteColor, TeamID team)
     {
@@ -45,27 +56,13 @@ public class Unit : MonoBehaviour, IDamagable
         move();
     }
 
+    // ----------------------------------------------------------------------------------------------------------------
 
 
-
-    public TeamID getTeamID()
-    {
-        return this.team;
-    }
-
-    public bool getIsAlive()
-    {
-        return this.isAlive;
-    }
 
     void move()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
-    }
-
-    void getTarget()
-    {
-
     }
 
     IEnumerator AttackTarget(IDamagable target)
