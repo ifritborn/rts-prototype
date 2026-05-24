@@ -1,7 +1,7 @@
 
 public interface IDamagable
 {
-    public Team getTeam();
+    public TeamID getTeamID();
     public bool getIsAlive();
     public void TakeDamage(int dmg){}
     private void DeathHandler(){}
