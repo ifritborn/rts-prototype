@@ -13,14 +13,14 @@ public class Unit : MonoBehaviour, IDamagable
     private int currentHealth;
     private float unitMvSpd = 1f;
     private float unitAtkSpd = 1.5f;
-    private TeamID team;
+    private TeamID teamID;
     private bool isAlive;
 
     // ----------------------------------------------------------------------------------------------------------------
 
     public TeamID getTeamID()
     {
-        return this.team;
+        return this.teamID;
     }
 
     public bool getIsAlive()
@@ -35,11 +35,11 @@ public class Unit : MonoBehaviour, IDamagable
 
     // ----------------------------------------------------------------------------------------------------------------
 
-    public void Initialize(Transform pos, Color spriteColor, TeamID team)
+    public void Initialize(Transform pos, Color spriteColor, TeamID teamID)
     {
         this.targetPOS = pos;
         this.GetComponent<SpriteRenderer>().color = spriteColor;
-        this.team = team;
+        this.teamID = teamID;
     }
 
     void Start()
@@ -99,7 +99,7 @@ public class Unit : MonoBehaviour, IDamagable
     private bool CanAttackTarget(IDamagable target)
     {
         bool CanAttack = false;
-        if (target.getTeamID() != this.team && target.getIsAlive() == true)
+        if (target.getTeamID() != this.teamID && target.getIsAlive() == true)
         {
             CanAttack = true;
             Debug.Log("Unit: is this alive? = " + target.getIsAlive());
@@ -111,11 +111,11 @@ public class Unit : MonoBehaviour, IDamagable
     void OnCollisionEnter2D(Collision2D target)
     {
         IDamagable t = target.gameObject.GetComponent<IDamagable>();
-        // Debug.Log("Unit: coliding with: " + target.gameObject.name);
+        Debug.Log("Unit: coliding with: " + target.gameObject.name);
 
 
         bool CanAttack = CanAttackTarget(t);
-        // Debug.Log("Unit: can I attack? " + CanAttack);
+        Debug.Log("Unit: can I attack? " + CanAttack);
 
         if (CanAttack)
         {

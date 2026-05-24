@@ -52,6 +52,7 @@ public class TeamController : MonoBehaviour
 
     private void initializeComponents()
     {
+        myBase.Initialize(teamID);
         spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
         bank.Initialize(WM, teamID);
     }

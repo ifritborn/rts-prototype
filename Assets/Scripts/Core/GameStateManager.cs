@@ -36,7 +36,7 @@ public class GameStateManager : MonoBehaviour
         WM.Initialize(this, player, ai);
         HUD.Initialize(player);
 
-        ai.getSpawner().changeArmySize(-1);
+        player.getSpawner().changeArmySize(-1);
 
 
         player.getBase().BaseIsDead += EndGame;

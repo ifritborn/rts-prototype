@@ -9,7 +9,6 @@ public class Building : MonoBehaviour, IDamagable
     private int currentHealth;
     private TeamID teamID;
     private bool isAlive;
-
     public event Action BaseIsDead;
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -27,13 +26,14 @@ public class Building : MonoBehaviour, IDamagable
 
     public bool getIsAlive()
     {
+        Debug.Log("Building: am I alive? - " + isAlive );
         return this.isAlive;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
 
-    void Start()
+    void Awake()
     {
         currentHealth = maxHp;
         this.isAlive = true;
@@ -41,8 +41,6 @@ public class Building : MonoBehaviour, IDamagable
 
     private void OnDestroy()
     {
-
-
     }
 
     // ----------------------------------------------------------------------------------------------------------------
