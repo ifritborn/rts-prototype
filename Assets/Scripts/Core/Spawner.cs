@@ -11,8 +11,12 @@ public class Spawner : MonoBehaviour
     private Vector3 SpawnPos;
     private Quaternion SpawnRotation;
     private TeamID team;
+    private int armySize = 1;
 
-
+    public void changeArmySize(int num)
+    {
+        armySize += num;
+    }
 
     public void Initialize(WaveManager WM, Building opposingBase, Color teamColor, Transform tform, TeamID team)
     {
@@ -34,8 +38,7 @@ public class Spawner : MonoBehaviour
 
     IEnumerator SpawnUnit()
     {
-        int spawnCount = 5;
-        for (int i = 0; i < spawnCount; i++)
+        for (int i = 0; i < armySize; i++)
         {
             float spread = Random.Range(-.25f, .25f);
             Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);

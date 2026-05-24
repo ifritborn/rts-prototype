@@ -52,7 +52,7 @@ public class WaveManager : MonoBehaviour
         {
             NextWave?.Invoke();
             waveNumber += 1;
-            Debug.Log("WM: wave num: " + waveNumber);
+            // Debug.Log("WM: wave num: " + waveNumber);
             yield return new WaitForSeconds(timerInterval);
         }
 

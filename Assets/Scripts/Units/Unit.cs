@@ -105,6 +105,7 @@ public class Unit : MonoBehaviour, IDamagable
         if (target.getTeamID() != this.team && target.getIsAlive() == true)
         {
             CanAttack = true;
+            Debug.Log("Unit: is this alive? = " + target.getIsAlive());
         }
 
         return CanAttack;

@@ -48,9 +48,22 @@ public class TeamController : MonoBehaviour
     private void initializeComponents()
     {
         spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
-        bank.Initialize(WM);
-
+        bank.Initialize(WM, teamID);
     }
 
+    public bool purchaseHandler(int cost)
+    {
+        if (bank.canAfford(cost)){
+            bank.modifyGold(cost * -1);
+            spawner.changeArmySize(1);
+            Debug.Log("TC: added 1 unit");
+            return true;
+        }
+        else
+        {
+            Debug.Log("TC: cannot add unit");
+            return false;
+        }
+    }
 
 }

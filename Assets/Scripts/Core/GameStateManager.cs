@@ -12,6 +12,7 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private TeamController ai;
     private Building aiBase;
     [SerializeField] private WaveManager WM;
+    [SerializeField] private HUDController HUD;
 
     public event Action<GameState> GameStateChange;
 
@@ -32,6 +33,8 @@ public class GameStateManager : MonoBehaviour
         player.Initialize(WM, aiBase, TeamID.Player);
         ai.Initialize(WM, playerBase, TeamID.AI);
         WM.Initialize(this, player, ai);
+        HUD.Initialize(player);
+
 
         player.getBase().BaseIsDead += EndGame;
         ai.getBase().BaseIsDead += EndGame;
