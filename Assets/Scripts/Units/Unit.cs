@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Security.Cryptography;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,14 +7,18 @@ using UnityEngine;
 public class Unit : MonoBehaviour, IDamagable
 {
 
+    private Transform opposingBasePos;
     private Transform targetPOS;
-    private bool isMoving;
-    private bool isAttacking;
-    [SerializeField] private int maxHp;
-    private int currentHealth;
-    private float unitMvSpd = 1f;
-    private float unitAtkSpd = 1.5f;
+    private CombatController CC;
+    private UnitEnum unitType;
+    private int maxHp;
+    private int unitDmg;
+    private float unitMvSpd;
+    private float unitAtkSpd;
+    private float detectRng;
+    private float atkRng;
     private TeamID teamID;
+    private int currentHP;
     private bool isAlive;
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -23,115 +28,103 @@ public class Unit : MonoBehaviour, IDamagable
         return this.teamID;
     }
 
+    public UnitEnum getUnitType()
+    {
+        return this.unitType;
+    }
+
     public bool getIsAlive()
     {
         return this.isAlive;
     }
 
-        void getTarget()
+    public float getAtkSpd()
     {
+        return unitAtkSpd;
+    }
 
+    public int getDmg()
+    {
+        return unitDmg;
+    }
+
+    public float getDetectRange()
+    {
+        return detectRng;
+    }
+
+    public float getAtkRng()
+    {
+        return atkRng;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
-    public void Initialize(Transform pos, Color spriteColor, TeamID teamID)
+
+    public void Initialize(Transform pos, Color spriteColor, TeamID teamID, UnitEnum unitType)
     {
-        this.targetPOS = pos;
+        this.opposingBasePos = pos;
+        this.targetPOS = opposingBasePos;
         this.GetComponent<SpriteRenderer>().color = spriteColor;
         this.teamID = teamID;
-    }
+        this.unitType = unitType;
 
-    void Start()
-    {
-        currentHealth = maxHp;
-        isMoving = true;
-        isAttacking = false;
-        isAlive = true;
-
+        CC = GetComponent<CombatController>();
+        setupUnit();
+        CC.Initialize(this, atkRng);
     }
 
     void Update()
     {
-        move();
+        if (CC.getCState() == CombatStateEnum.Moving)
+        {
+            setMoveTarget();
+            move(targetPOS);
+        }
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
-
-
-    void move()
+    private void move(Transform targetPOS)
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
     }
 
-    IEnumerator AttackTarget(IDamagable target)
+    private void setMoveTarget()
     {
-        isAttacking = true;
-
-        while (target != null)
+        if (!CC.getTargetPOS())
         {
-            if (target.getIsAlive() == false)
-            {
-                if (!isMoving)
-                {
-                    isMoving = true;
-                    unitMvSpd = 1;
-                }
-                break;
-            }
-            else
-            {
-                if (isMoving)
-                {
-                    isMoving = false;
-                    unitMvSpd = 0;
-                }
-                target.TakeDamage(25);
-                yield return new WaitForSeconds(unitAtkSpd);
-            }
-
+            targetPOS = opposingBasePos;
         }
-        // Debug.Log("Unit: attack while loop over");
-        isAttacking = false;
+        else
+        {
+            targetPOS = CC.getTargetPOS();
+        }
     }
 
-    private bool CanAttackTarget(IDamagable target)
+    private void setupUnit()
     {
-        bool CanAttack = false;
-        if (target.getTeamID() != this.teamID && target.getIsAlive() == true)
-        {
-            CanAttack = true;
-            Debug.Log("Unit: is this alive? = " + target.getIsAlive());
-        }
+        this.maxHp = UnitRegistry.getUnitData(unitType).MaxHP;
+        this.unitDmg = UnitRegistry.getUnitData(unitType).Dmg;
+        this.unitAtkSpd = UnitRegistry.getUnitData(unitType).AtkSpd;
+        this.unitMvSpd = UnitRegistry.getUnitData(unitType).MvSpd;
+        this.detectRng = UnitRegistry.getUnitData(unitType).DetectRange;
+        this.atkRng = UnitRegistry.getUnitData(unitType).AtkRange;
 
-        return CanAttack;
+        this.currentHP = maxHp;
+        this.isAlive = true;
     }
 
-    void OnCollisionEnter2D(Collision2D target)
-    {
-        IDamagable t = target.gameObject.GetComponent<IDamagable>();
-        Debug.Log("Unit: coliding with: " + target.gameObject.name);
 
-
-        bool CanAttack = CanAttackTarget(t);
-        Debug.Log("Unit: can I attack? " + CanAttack);
-
-        if (CanAttack)
-        {
-            StartCoroutine(AttackTarget(t));
-        }
-
-    }
 
     void OnCollisionExit2D(Collision2D collision)
     {
         // Debug.Log("Unit: exiting collision");
-        if (!isMoving)
-        {
-            isMoving = true;
-            unitMvSpd = 1;
-        }
+        // if (!isMoving)
+        // {
+        //     isMoving = true;
+        //     unitMvSpd = 1;
+        // }
 
     }
 
@@ -139,12 +132,12 @@ public class Unit : MonoBehaviour, IDamagable
     public void TakeDamage(int dmgVal)
     {
 
-        int updatedHp = currentHealth - dmgVal;
+        int updatedHp = currentHP - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
-        currentHealth = hpBounds;
+        currentHP = hpBounds;
         // Debug.Log("Unit: dmg - hp at: " + currentHealth);
 
-        if (currentHealth == 0 && this.isAlive == true)
+        if (currentHP == 0 && this.isAlive == true)
         {
             DeathHandler();
         }

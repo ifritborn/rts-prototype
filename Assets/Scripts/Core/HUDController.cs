@@ -3,7 +3,7 @@ using UnityEngine;
 public class HUDController : MonoBehaviour
 {
     private TeamController playerTC;
-    private UnitData baseUnit = UnitRegistry.getUnitData(UnitEnum.BaseUnit);
+    private UnitData soldier = UnitRegistry.getUnitData(UnitEnum.Soldier);
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -19,6 +19,6 @@ public class HUDController : MonoBehaviour
     public void addUnits()
     {
         Debug.Log("HUDController: Button click heard");
-        playerTC.purchaseHandler(baseUnit.GoldCost);
+        playerTC.purchaseHandler(soldier.GoldCost);
     }
 }

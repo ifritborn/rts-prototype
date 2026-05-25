@@ -61,7 +61,7 @@ public class TeamController : MonoBehaviour
     {
         if (bank.canAfford(cost)){
             bank.modifyGold(cost * -1);
-            spawner.changeArmySize(1);
+            spawner.changeArmySize(10);
             Debug.Log("TC: added 1 unit");
             return true;
         }

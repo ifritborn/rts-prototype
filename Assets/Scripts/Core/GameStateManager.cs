@@ -5,13 +5,14 @@ public class GameStateManager : MonoBehaviour
 {
 
 
-    GameState CurrentGameState;
+    private GameState CurrentGameState;
 
     [SerializeField] private TeamController player;
     private Building playerBase;
     [SerializeField] private TeamController ai;
     private Building aiBase;
     [SerializeField] private WaveManager WM;
+    
     [SerializeField] private HUDController HUD;
 
     public event Action<GameState> GameStateChange;
@@ -36,7 +37,9 @@ public class GameStateManager : MonoBehaviour
         WM.Initialize(this, player, ai);
         HUD.Initialize(player);
 
-        player.getSpawner().changeArmySize(-1);
+        player.getSpawner().changeArmySize(0);
+        ai.getSpawner().changeArmySize(0);
+
 
 
         player.getBase().BaseIsDead += EndGame;

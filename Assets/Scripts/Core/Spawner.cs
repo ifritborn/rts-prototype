@@ -25,6 +25,7 @@ public class Spawner : MonoBehaviour
         this.SpawnRotation = tform.rotation;
         this.team = team;
 
+
         WM.NextWave += SpawnWave;
     }
 
@@ -51,7 +52,7 @@ public class Spawner : MonoBehaviour
             var newUnit = Instantiate(unitPrefab, SpreadSpawnPos, SpawnRotation);
             newUnit.name = $"{team} Unit";
             var unitScript = newUnit.GetComponent<Unit>();
-            unitScript.Initialize(opposingBase.transform, teamColor, team);
+            unitScript.Initialize(opposingBase.transform, teamColor, team, UnitEnum.Soldier);
             yield return new WaitForSeconds(.01f);
         }
     }
