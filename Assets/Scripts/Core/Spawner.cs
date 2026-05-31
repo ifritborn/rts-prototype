@@ -47,10 +47,10 @@ public class Spawner : MonoBehaviour
     {
         for (int i = 0; i < armySize; i++)
         {
-            float spread = Random.Range(-.25f, .25f);
+            float spread = Random.Range(-.5f, .5f);
             Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);
             var newUnit = Instantiate(unitPrefab, SpreadSpawnPos, SpawnRotation);
-            newUnit.name = $"{team} Unit";
+            newUnit.name = $"{team} Unit {i + 1}";
             var unitScript = newUnit.GetComponent<Unit>();
             unitScript.Initialize(opposingBase.transform, teamColor, team, UnitEnum.Soldier);
             yield return new WaitForSeconds(.01f);

@@ -20,6 +20,7 @@ public class Unit : MonoBehaviour, IDamagable
     private TeamID teamID;
     private int currentHP;
     private bool isAlive;
+    private bool isBase = false;
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -58,6 +59,11 @@ public class Unit : MonoBehaviour, IDamagable
         return atkRng;
     }
 
+    public bool getIsBase()
+    {
+        return this.isBase;
+    }
+
     // ----------------------------------------------------------------------------------------------------------------
 
 
@@ -72,6 +78,11 @@ public class Unit : MonoBehaviour, IDamagable
         CC = GetComponent<CombatController>();
         setupUnit();
         CC.Initialize(this, atkRng);
+
+        if (this.name == "Player Unit 1")
+        {
+            this.GetComponent<SpriteRenderer>().color = Color.magenta;
+        }
     }
 
     void Update()
@@ -85,25 +96,10 @@ public class Unit : MonoBehaviour, IDamagable
 
     // ----------------------------------------------------------------------------------------------------------------
 
-    private void move(Transform targetPOS)
-    {
-        transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
-    }
-
-    private void setMoveTarget()
-    {
-        if (!CC.getTargetPOS())
-        {
-            targetPOS = opposingBasePos;
-        }
-        else
-        {
-            targetPOS = CC.getTargetPOS();
-        }
-    }
-
     private void setupUnit()
     {
+
+        //TODO: refactor this so its only one call to get the unit data
         this.maxHp = UnitRegistry.getUnitData(unitType).MaxHP;
         this.unitDmg = UnitRegistry.getUnitData(unitType).Dmg;
         this.unitAtkSpd = UnitRegistry.getUnitData(unitType).AtkSpd;
@@ -115,18 +111,37 @@ public class Unit : MonoBehaviour, IDamagable
         this.isAlive = true;
     }
 
-
-
-    void OnCollisionExit2D(Collision2D collision)
+    private void move(Transform targetPOS)
     {
-        // Debug.Log("Unit: exiting collision");
-        // if (!isMoving)
-        // {
-        //     isMoving = true;
-        //     unitMvSpd = 1;
-        // }
+        if (CC.getCState() == CombatStateEnum.Moving)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
 
+        }
     }
+
+    private void setMoveTarget()
+    {
+        if (!CC.getTargetPOS())
+        {
+            targetPOS = opposingBasePos;
+            if (this.name == "Player Unit 1")
+            {
+                // Debug.Log(this.name + " targeting oppsoing base");
+
+            }
+        }
+        else
+        {
+            targetPOS = CC.getTargetPOS();
+            if (this.name == "Player Unit 1")
+            {
+                // Debug.Log(this.name + " targeting a unit");
+
+            }
+        }
+    }
+
 
 
     public void TakeDamage(int dmgVal)
@@ -135,7 +150,7 @@ public class Unit : MonoBehaviour, IDamagable
         int updatedHp = currentHP - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHP = hpBounds;
-        // Debug.Log("Unit: dmg - hp at: " + currentHealth);
+        // Debug.Log(this.name + " Unit: dmg - hp at: " + currentHP);
 
         if (currentHP == 0 && this.isAlive == true)
         {
@@ -149,7 +164,7 @@ public class Unit : MonoBehaviour, IDamagable
         // unit destroyed logic 
         this.isAlive = false;
         Destroy(gameObject);
-        // Debug.Log("Unit Death");
+        // Debug.Log(this.name + " Unit Death");
 
     }
 }

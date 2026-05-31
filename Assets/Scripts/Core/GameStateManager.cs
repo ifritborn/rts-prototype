@@ -46,6 +46,7 @@ public class GameStateManager : MonoBehaviour
         ai.getBase().BaseIsDead += EndGame;
 
         setGameState(GameState.GameInProgress);
+        // Time.timeScale = 0.5f;
         Debug.Log("GM: Start - gamestate = " + getGameState());
     }
 

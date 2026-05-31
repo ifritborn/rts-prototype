@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
 {
 
+
     private CombatStateEnum CState;
     private Unit unit;
     private float unitAtkRng;
     private bool hasTarget;
+    private bool isAttacking;
     private bool isInitialized;
     private Transform targetPOS;
+    private Transform currentTarget;
+    private IDamagable currentDamagable;
 
 
     public Transform getTargetPOS()
@@ -25,6 +29,7 @@ public class CombatController : MonoBehaviour
         this.unitAtkRng = unitAtkRng;
         CState = CombatStateEnum.Moving;
         hasTarget = false;
+        isAttacking = false;
         isInitialized = true;
 
     }
@@ -32,10 +37,44 @@ public class CombatController : MonoBehaviour
 
     private void Update()
     {
-        if (!hasTarget & isInitialized)
+        if (isInitialized)
         {
-            findTarget();
+            if (!hasTarget)
+            {
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(
+                //                 "CC - findTarget() \n" +
+                //                 "====================\n" +
+                //                 gameObject.name + "\n" +
+                //                 "====================\n" +
+                //                 "State: " + CState + "\n" +
+                //                 "Has Target: " + hasTarget + "\n" +
+                //                 "Attacking: " + isAttacking + "\n" +
+                //                 "Target: " + currentTarget + "\n"
+                //             );
+                // }
+                findTarget();
+            }
+            else if (hasTarget && !isAttacking)
+            {
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(
+                //                 "CC - attackHandler() \n" +
+                //                 "====================\n" +
+                //                 gameObject.name + "\n" +
+                //                 "====================\n" +
+                //                 "State: " + CState + "\n" +
+                //                 "Has Target: " + hasTarget + "\n" +
+                //                 "Attacking: " + isAttacking + "\n" +
+                //                 "Target: " + currentTarget + "\n"
+                //             ); ;
+                // }
+                attackHandler(currentTarget, currentDamagable);
+            }
         }
+
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -47,83 +86,150 @@ public class CombatController : MonoBehaviour
         return CState;
     }
 
+    private bool isValidTarget(IDamagable target)
+    {
+        // if (unit.name == "Player Unit 1" && target.getTeamID() != TeamID.Player)
+        //     {
+        //          Debug.Log("IVT: target/team " + target + " / " + target.getTeamID());
+        //     }
+        if (target.getTeamID() != unit.getTeamID() && target.getIsAlive() == true)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     private void findTarget()
     {
+        // Debug.Log("findTarget() called");
+        Collider2D[] targetList = Physics2D.OverlapCircleAll(unit.transform.position, unit.getDetectRange());
+        // Debug.Log("target list length = " + targetList.Length);
 
-        Collider2D[] targetList = Physics2D.OverlapCircleAll(unit.transform.position, unitAtkRng);
+
         for (int i = 0; i < targetList.Length; i++)
         {
             Transform t = targetList[i].gameObject.GetComponent<Transform>();
             IDamagable x = targetList[i].gameObject.GetComponent<IDamagable>();
-            Debug.Log("CC: x = " + x);
+
+
+            
             if (t != null && x != null)
             {
-                if (isValidTarget(targetList[i].gameObject.GetComponent<IDamagable>()))
+                if (isValidTarget(x))
                 {
                     targetPOS = t;
+                    // if (unit.name == "Player Unit 1")
+                    // {
+                    //     Debug.Log("CC: x = " + x);
+                    //     Debug.Log(unit.name + " Unit - findTarget: Target found");
+                    // }
                     hasTarget = true;
+                    currentTarget = t;
+                    currentDamagable = x;
                     break;
                 }
             }
         }
-
-
+        return;
     }
 
-
-
-    private bool isValidTarget(IDamagable target)
+    private void isTargetAlive(IDamagable x)
     {
-        bool isValid = false;
+        // if (unit.name == "Player Unit 1")
+        // {
+        //     Debug.Log("isTargetAlive = " + x);
 
-        if (target.getTeamID() != unit.getTeamID() && target.getIsAlive() == true)
+        // }
+        if (!x.getIsAlive() || x == null)
         {
-            isValid = true;
-            // Debug.Log("Unit: is this alive? = " + target.getIsAlive());
+            hasTarget = false;
         }
-
-        return isValid;
     }
 
-    void OnCollisionEnter2D(Collision2D target)
+    private void attackHandler(Transform t, IDamagable x)
     {
-        IDamagable t = target.gameObject.GetComponent<IDamagable>();
-        // Debug.Log("Unit: coliding with: " + target.gameObject.name);
-
-        if (t != null)
+        isTargetAlive(x);
+        if (t != null && x != null)
         {
-            bool CanAttack = isValidTarget(t);
-            // Debug.Log("Unit: can I attack? " + CanAttack);
 
-            if (CanAttack)
+            float dist;
+            if (x.getIsBase())
             {
-                StartCoroutine(AttackTarget(t));
+                Collider2D collider = t.GetComponent<Collider2D>();
+                Vector2 closestpoint = collider.ClosestPoint(transform.position);
+                dist = Vector2.Distance(transform.position, closestpoint);
+            }
+            else
+            {
+                dist = Vector2.Distance(transform.position, t.transform.position);
+            }
+            
+
+            if (dist > unitAtkRng)
+            {
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(unit.name + " target = " + currentTarget);
+                // }
+                return;
+            }
+            else
+            {
+                isAttacking = true;
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(unit.name + " Unit - attackHandler: in attack range, starting attack");
+                // }
+                StartCoroutine(AttackTarget(x, dist));
+                return;
             }
         }
+
+
     }
 
 
-    IEnumerator AttackTarget(IDamagable target)
+    IEnumerator AttackTarget(IDamagable target, float dist)
     {
+        // Debug.Log("AttackTarget() called");
         while (target != null)
         {
             if (!isValidTarget(target))
             {
                 // Debug.Log("Unit: target dead, start moving");
                 CState = CombatStateEnum.Moving;
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(unit.name + " Unit - atk coroutine: !hasTarget - CState = " + CState);
+                // }
+                hasTarget = false;
+                isAttacking = false;
+                targetPOS = null;
+                // currentTarget = null;
+                // currentDamagable = null;
                 break;
 
             }
+            else if (dist > unitAtkRng)
+            {
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(unit.name + " out of range exiting AttackTarget");
+                // }
+                break;
+            }
             else if (isValidTarget(target))
             {
-                Debug.Log("Unit: target alive, stop moving");
                 CState = CombatStateEnum.Fighting;
+                // if (unit.name == "Player Unit 1")
+                // {
+                //     Debug.Log(unit.name + "Unit - atk coroutine: attacking - CState = " + CState);
+                // }
                 target.TakeDamage(unit.getDmg());
                 yield return new WaitForSeconds(unit.getAtkSpd());
             }
-
         }
     }
-
 
 }

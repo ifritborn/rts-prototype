@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 781067850251599952}
   - component: {fileID: 2876370320415826759}
   - component: {fileID: 3170330690047174872}
-  - component: {fileID: -5879055241813427828}
+  - component: {fileID: 8939161887582434738}
   m_Layer: 0
   m_Name: Soldier
   m_TagString: Untagged
@@ -140,7 +140,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0.05
+  m_EdgeRadius: 0
 --- !u!50 &2876370320415826759
 Rigidbody2D:
   serializedVersion: 5
@@ -180,9 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c14a61caa5a73234286d50dc50a29d8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
-  maxHp: 1000
-  CC: {fileID: 0}
---- !u!114 &-5879055241813427828
+--- !u!114 &8939161887582434738
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
