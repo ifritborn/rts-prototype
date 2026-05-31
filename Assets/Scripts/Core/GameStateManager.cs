@@ -35,10 +35,10 @@ public class GameStateManager : MonoBehaviour
         player.Initialize(WM, aiBase, TeamID.Player);
         ai.Initialize(WM, playerBase, TeamID.AI);
         WM.Initialize(this, player, ai);
-        HUD.Initialize(player);
+        HUD.Initialize(WM, player);
 
-        player.getSpawner().changeArmySize(0);
-        ai.getSpawner().changeArmySize(0);
+        // player.getSpawner().changeArmySize(0);
+        // ai.getSpawner().changeArmySize(0);
 
 
 

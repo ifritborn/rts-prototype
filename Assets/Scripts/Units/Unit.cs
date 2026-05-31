@@ -79,10 +79,10 @@ public class Unit : MonoBehaviour, IDamagable
         setupUnit();
         CC.Initialize(this, atkRng);
 
-        if (this.name == "Player Unit 1")
-        {
-            this.GetComponent<SpriteRenderer>().color = Color.magenta;
-        }
+        // if (this.name == "Player Unit 1")
+        // {
+        //     this.GetComponent<SpriteRenderer>().color = Color.magenta;
+        // }
     }
 
     void Update()

@@ -11,7 +11,11 @@ public class Spawner : MonoBehaviour
     private Vector3 SpawnPos;
     private Quaternion SpawnRotation;
     private TeamID team;
-    private int armySize = 1;
+
+    private int soldierPool = 0;
+    private int tankPool = 0;
+
+    private int armySize;
 
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -24,6 +28,8 @@ public class Spawner : MonoBehaviour
         this.SpawnPos = tform.position;
         this.SpawnRotation = tform.rotation;
         this.team = team;
+
+        this.armySize = soldierPool + tankPool;
 
 
         WM.NextWave += SpawnWave;

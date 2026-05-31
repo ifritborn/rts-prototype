@@ -7,6 +7,9 @@ public static class UnitRegistry
         {
             // int GoldCost, int HP, int DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange
             UnitEnum.Soldier, new UnitData(100, 100, 25, 1.5f, 1f, 5f, .35f)
+        },
+        {
+            UnitEnum.Tank, new UnitData(300, 500, 100, .5f, 1f, 5f, .35f)
         }
     };
 
