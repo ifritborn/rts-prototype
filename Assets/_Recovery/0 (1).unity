@@ -9065,7 +9065,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0988f412f4bece741bbf8a0379832cd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  unitPrefab: {fileID: 3170330690047174872, guid: 88ed8ef44fa0389458d864e5b54c67ff, type: 3}
+  soldierPrefab: {fileID: 3170330690047174872, guid: 88ed8ef44fa0389458d864e5b54c67ff, type: 3}
+  tankPrefab: {fileID: 1669063335311373360, guid: 742893410f4e7ba47a1ad659b59ba5a1, type: 3}
 --- !u!1 &599830400
 GameObject:
   m_ObjectHideFlags: 0
@@ -10593,7 +10594,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0988f412f4bece741bbf8a0379832cd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  unitPrefab: {fileID: 3170330690047174872, guid: 88ed8ef44fa0389458d864e5b54c67ff, type: 3}
+  soldierPrefab: {fileID: 3170330690047174872, guid: 88ed8ef44fa0389458d864e5b54c67ff, type: 3}
+  tankPrefab: {fileID: 1669063335311373360, guid: 742893410f4e7ba47a1ad659b59ba5a1, type: 3}
 --- !u!1 &1899958124
 GameObject:
   m_ObjectHideFlags: 0

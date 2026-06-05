@@ -1,15 +1,19 @@
 using System.Collections.Generic;
 
 public static class UnitRegistry
+
+
 {
+
+     
     private static readonly Dictionary<UnitEnum, UnitData> units = new Dictionary<UnitEnum, UnitData>
     {
         {
-            // int GoldCost, int HP, int DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange
-            UnitEnum.Soldier, new UnitData(100, 100, 25, 1.5f, 1f, 5f, .35f)
+            //  enum name[0], int GoldCost[1], int HP[2], int DMG[3], float AtkSpd[4], float MvSpd[5], float DetectRange[6], float AtkRange[7]
+            UnitEnum.Soldier, new UnitData("Soldier", 200, 100, 25, 1.5f, 1f, 5f, .35f)
         },
         {
-            UnitEnum.Tank, new UnitData(300, 500, 100, .5f, 1f, 5f, .35f)
+            UnitEnum.Tank, new UnitData("Tank", 300, 500, 50, .3f, .5f, 5f, .45f)
         }
     };
 

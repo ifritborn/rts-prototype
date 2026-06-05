@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class Spawner : MonoBehaviour
 {
 
-    [SerializeField] Unit unitPrefab;
+    [SerializeField] Unit soldierPrefab;
+    [SerializeField] Unit tankPrefab;
+
     private WaveManager WM;
     private Building opposingBase;
     private Color teamColor;
@@ -12,10 +16,7 @@ public class Spawner : MonoBehaviour
     private Quaternion SpawnRotation;
     private TeamID team;
 
-    private int soldierPool = 0;
-    private int tankPool = 0;
-
-    private int armySize;
+    private Dictionary<UnitEnum, int> armyPool = new Dictionary<UnitEnum, int>();
 
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -29,37 +30,65 @@ public class Spawner : MonoBehaviour
         this.SpawnRotation = tform.rotation;
         this.team = team;
 
-        this.armySize = soldierPool + tankPool;
-
+        setupArmyDict();
 
         WM.NextWave += SpawnWave;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
-
-    public void changeArmySize(int num)
+    private void setupArmyDict()
     {
-        armySize += num;
+
+
+        armyPool.Add(UnitEnum.Soldier, 1);
+        armyPool.Add(UnitEnum.Tank, 0);
     }
 
-    void SpawnWave()
+    public void addUnitToArmy(UnitEnum unit, int num)
+    {
+        
+        armyPool[unit] += num;
+    }
+
+    private void SpawnWave()
     {
         StartCoroutine(SpawnUnit());
     }
 
 
+    private Unit pickPrefab(KeyValuePair<UnitEnum, int> unit)
+    {
+
+        Debug.Log("SpawnUnit: pickPrefab() " + unit.Key);
+        switch (unit.Key)
+        {
+            case UnitEnum.Soldier:
+                return soldierPrefab;
+            case UnitEnum.Tank:
+                return tankPrefab;
+            default:
+                return null;
+        }
+    }
+
+
     IEnumerator SpawnUnit()
     {
-        for (int i = 0; i < armySize; i++)
+
+        foreach (KeyValuePair<UnitEnum, int> unit in armyPool)
         {
+            for (int i = 0; i < unit.Value; i++)
+            {
             float spread = Random.Range(-.5f, .5f);
             Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);
-            var newUnit = Instantiate(unitPrefab, SpreadSpawnPos, SpawnRotation);
-            newUnit.name = $"{team} Unit {i + 1}";
+            Unit prefab = pickPrefab(unit);
+            var newUnit = Instantiate(prefab, SpreadSpawnPos, SpawnRotation);
+            newUnit.name = $"{team} Unit";
             var unitScript = newUnit.GetComponent<Unit>();
-            unitScript.Initialize(opposingBase.transform, teamColor, team, UnitEnum.Soldier);
-            yield return new WaitForSeconds(.01f);
+            unitScript.Initialize(opposingBase.transform, teamColor, team, unit.Key);
+            }
         }
+        yield return new WaitForSeconds(.01f);
     }
 }

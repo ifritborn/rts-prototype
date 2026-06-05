@@ -99,13 +99,15 @@ public class Unit : MonoBehaviour, IDamagable
     private void setupUnit()
     {
 
-        //TODO: refactor this so its only one call to get the unit data
-        this.maxHp = UnitRegistry.getUnitData(unitType).MaxHP;
-        this.unitDmg = UnitRegistry.getUnitData(unitType).Dmg;
-        this.unitAtkSpd = UnitRegistry.getUnitData(unitType).AtkSpd;
-        this.unitMvSpd = UnitRegistry.getUnitData(unitType).MvSpd;
-        this.detectRng = UnitRegistry.getUnitData(unitType).DetectRange;
-        this.atkRng = UnitRegistry.getUnitData(unitType).AtkRange;
+        UnitData data = UnitRegistry.getUnitData(unitType);
+        Debug.Log("Tank data" + data);
+
+        this.maxHp = data.MaxHP;
+        this.unitDmg = data.Dmg;
+        this.unitAtkSpd = data.AtkSpd;
+        this.unitMvSpd = data.MvSpd;
+        this.detectRng = data.DetectRange;
+        this.atkRng = data.AtkRange;
 
         this.currentHP = maxHp;
         this.isAlive = true;

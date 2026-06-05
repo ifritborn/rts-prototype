@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class TeamController : MonoBehaviour
 {
@@ -78,25 +79,9 @@ public class TeamController : MonoBehaviour
         bank.Initialize(WM, teamID);
     }
 
-    public bool purchaseHandler(int cost, bool unit)
+    public bool purchaseHandler(int cost)
     {
-        if (unit)
-        {
-            if (bank.canAfford(cost))
-            {
-                bank.modifyGold(cost * -1);
-                spawner.changeArmySize(1);
-                Debug.Log("TC: added 1 unit");
-                return true;
-            }
-            else
-            {
-                Debug.Log("TC: cannot add unit");
-                return false;
-            }
-        }
-        else
-        {
+        
             if (bank.canAfford(cost))
             {
                 bank.modifyGold(cost * -1);
@@ -109,8 +94,23 @@ public class TeamController : MonoBehaviour
                 Debug.Log("TC: cannot add to economy");
                 return false;
             }
-        }
+    }
 
+    public bool purchaseHandler(UnitEnum e, int num)
+    {
+        int cost = UnitRegistry.getUnitData(e).GoldCost;
+        if (bank.canAfford(cost))
+            {
+                bank.modifyGold(cost * -1);
+                spawner.addUnitToArmy(e, num);
+                Debug.Log("TC: added 1 unit");
+                return true;
+            }
+            else
+            {
+                Debug.Log("TC: cannot add unit");
+                return false;
+            }
     }
 
 

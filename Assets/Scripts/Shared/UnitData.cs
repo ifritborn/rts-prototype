@@ -3,6 +3,7 @@ using Unity.Mathematics;
 public class UnitData
 {
     // This is a POJO/SCHEMA
+    public string Name { get; }
     public int GoldCost { get; }
     public int MaxHP { get; }
     public int Dmg { get; }
@@ -11,8 +12,9 @@ public class UnitData
     public float DetectRange { get; }
     public float AtkRange { get; }
 
-    public UnitData(int GoldCost, int HP, int DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange)
+    public UnitData(string Name, int GoldCost, int HP, int DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange)
     {
+        this.Name = Name;
         this.GoldCost = GoldCost;
         this.MaxHP = HP;
         this.Dmg = DMG;

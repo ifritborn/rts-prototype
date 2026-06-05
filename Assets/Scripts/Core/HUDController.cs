@@ -13,8 +13,6 @@ public class HUDController : MonoBehaviour
     private string waveTimerTxtString = "Wave ";
     private TeamController playerTC;
     private WaveManager WM;
-    private UnitData soldier = UnitRegistry.getUnitData(UnitEnum.Soldier);
-    private UnitData tank = UnitRegistry.getUnitData(UnitEnum.Tank);
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -23,7 +21,7 @@ public class HUDController : MonoBehaviour
     {
         this.playerTC = playerTC;
         this.WM = WM;
-        Debug.Log(playerTC.getIsBankInitialized());
+        // Debug.Log(playerTC.getIsBankInitialized());
 
         WM.NextWave += waveHandler;
         incomeTxt.text = incomeTxtString + playerTC.getBankWaveIncome().ToString();
@@ -46,19 +44,19 @@ public class HUDController : MonoBehaviour
     public void buySoldier()
     {
         Debug.Log("HUDController: Buy Soldier heard");
-        playerTC.purchaseHandler(soldier.GoldCost, true);
+        playerTC.purchaseHandler(UnitEnum.Soldier, 1);
     }
 
     public void buyTank()
     {
         Debug.Log("HUDController: Buy Tank heard");
-        playerTC.purchaseHandler(tank.GoldCost, true);
+        playerTC.purchaseHandler(UnitEnum.Tank, 1);
     }
 
     public void growEconomy()
     {
         Debug.Log("HUDController: Grow Econ heard");
-        playerTC.purchaseHandler(100, false);
+        playerTC.purchaseHandler(100);
         incomeTxt.text = incomeTxtString + playerTC.getBankWaveIncome().ToString();
     }
 

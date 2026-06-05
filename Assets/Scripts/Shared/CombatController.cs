@@ -15,6 +15,7 @@ public class CombatController : MonoBehaviour
     private Transform targetPOS;
     private Transform currentTarget;
     private IDamagable currentDamagable;
+    private Unit currentUnitTarget;
 
 
     public Transform getTargetPOS()
@@ -71,7 +72,7 @@ public class CombatController : MonoBehaviour
                 //                 "Target: " + currentTarget + "\n"
                 //             ); ;
                 // }
-                attackHandler(currentTarget, currentDamagable);
+                attackHandler(currentTarget, currentDamagable, currentUnitTarget);
             }
         }
 
@@ -109,6 +110,7 @@ public class CombatController : MonoBehaviour
 
         for (int i = 0; i < targetList.Length; i++)
         {
+            Unit u = targetList[i].gameObject.GetComponent<Unit>();
             Transform t = targetList[i].gameObject.GetComponent<Transform>();
             IDamagable x = targetList[i].gameObject.GetComponent<IDamagable>();
 
@@ -127,6 +129,7 @@ public class CombatController : MonoBehaviour
                     hasTarget = true;
                     currentTarget = t;
                     currentDamagable = x;
+                    currentUnitTarget = u;
                     break;
                 }
             }
@@ -147,22 +150,24 @@ public class CombatController : MonoBehaviour
         }
     }
 
-    private void attackHandler(Transform t, IDamagable x)
+    private void attackHandler(Transform t, IDamagable x, Unit u)
     {
         isTargetAlive(x);
         if (t != null && x != null)
         {
 
             float dist;
-            if (x.getIsBase())
+            if (x.getIsBase() || u.getUnitType() == UnitEnum.Tank)
             {
                 Collider2D collider = t.GetComponent<Collider2D>();
                 Vector2 closestpoint = collider.ClosestPoint(transform.position);
                 dist = Vector2.Distance(transform.position, closestpoint);
+                Debug.Log("atackHandler: base distance triggered");
             }
             else
             {
                 dist = Vector2.Distance(transform.position, t.transform.position);
+                Debug.Log("atackHandler: soldier distance triggered");
             }
             
 
@@ -170,7 +175,7 @@ public class CombatController : MonoBehaviour
             {
                 // if (unit.name == "Player Unit 1")
                 // {
-                //     Debug.Log(unit.name + " target = " + currentTarget);
+                    Debug.Log(unit.name + " target = " + currentTarget);
                 // }
                 return;
             }
@@ -179,7 +184,7 @@ public class CombatController : MonoBehaviour
                 isAttacking = true;
                 // if (unit.name == "Player Unit 1")
                 // {
-                //     Debug.Log(unit.name + " Unit - attackHandler: in attack range, starting attack");
+                    Debug.Log(unit.name + " Unit - attackHandler: in attack range, starting attack");
                 // }
                 StartCoroutine(AttackTarget(x, dist));
                 return;
@@ -201,13 +206,14 @@ public class CombatController : MonoBehaviour
                 CState = CombatStateEnum.Moving;
                 // if (unit.name == "Player Unit 1")
                 // {
-                //     Debug.Log(unit.name + " Unit - atk coroutine: !hasTarget - CState = " + CState);
+                    // Debug.Log(unit.name + " Unit - atk coroutine: !hasTarget - CState = " + CState);
                 // }
                 hasTarget = false;
                 isAttacking = false;
                 targetPOS = null;
-                // currentTarget = null;
-                // currentDamagable = null;
+                currentTarget = null;
+                currentDamagable = null;
+                currentUnitTarget = null;
                 break;
 
             }
@@ -215,7 +221,7 @@ public class CombatController : MonoBehaviour
             {
                 // if (unit.name == "Player Unit 1")
                 // {
-                //     Debug.Log(unit.name + " out of range exiting AttackTarget");
+                    Debug.Log(unit.name + " out of range exiting AttackTarget");
                 // }
                 break;
             }
@@ -224,7 +230,7 @@ public class CombatController : MonoBehaviour
                 CState = CombatStateEnum.Fighting;
                 // if (unit.name == "Player Unit 1")
                 // {
-                //     Debug.Log(unit.name + "Unit - atk coroutine: attacking - CState = " + CState);
+                    Debug.Log(unit.name + "Unit - atk coroutine: attacking - CState = " + CState);
                 // }
                 target.TakeDamage(unit.getDmg());
                 yield return new WaitForSeconds(unit.getAtkSpd());
