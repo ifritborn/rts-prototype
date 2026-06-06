@@ -17,6 +17,8 @@ public class WaveManager : MonoBehaviour
     private int waveNumber;
 
     public event Action NextWave;
+    public event Action AIAction;
+    public event Action SpawnerAction;
 
     public int getWaveNumber()
     {
@@ -74,6 +76,9 @@ public class WaveManager : MonoBehaviour
         while (this.state == GameState.GameInProgress)
         {
             NextWave?.Invoke();
+            SpawnerAction?.Invoke();
+            AIAction?.Invoke();
+            
             waveNumber += 1;
             while (timeToWave > 0)
             {

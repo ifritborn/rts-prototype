@@ -100,7 +100,6 @@ public class Unit : MonoBehaviour, IDamagable
     {
 
         UnitData data = UnitRegistry.getUnitData(unitType);
-        Debug.Log("Tank data" + data);
 
         this.maxHp = data.MaxHP;
         this.unitDmg = data.Dmg;

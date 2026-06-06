@@ -77,40 +77,56 @@ public class TeamController : MonoBehaviour
         myBase.Initialize(teamID);
         spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
         bank.Initialize(WM, teamID);
+
     }
 
     public bool purchaseHandler(int cost)
     {
-        
-            if (bank.canAfford(cost))
-            {
-                bank.modifyGold(cost * -1);
-                bank.modifyWaveGold(50);
-                Debug.Log("TC: added 50g to economy");
-                return true;
-            }
-            else
-            {
-                Debug.Log("TC: cannot add to economy");
-                return false;
-            }
+
+        if (bank.canAfford(cost))
+        {
+            bank.modifyGold(cost * -1);
+            bank.modifyWaveGold(50);
+            // if (teamID == TeamID.AI)
+            // {
+            //     Debug.Log("Wave " + WM.getWaveNumber() + " - TC: added 50g to economy");
+            //     Debug.Log("Wave " + WM.getWaveNumber() + " - TC: current bank: " + bank.getCurrentGold());
+            // }
+            
+            return true;
+        }
+        else
+        {
+            Debug.Log("TC: cannot add to economy");
+            return false;
+        }
     }
 
     public bool purchaseHandler(UnitEnum e, int num)
     {
         int cost = UnitRegistry.getUnitData(e).GoldCost;
+        // Debug.Log("purchase handler - cost = " + cost);
         if (bank.canAfford(cost))
-            {
-                bank.modifyGold(cost * -1);
-                spawner.addUnitToArmy(e, num);
-                Debug.Log("TC: added 1 unit");
-                return true;
-            }
-            else
+        {
+            bank.modifyGold(cost * -1);
+            spawner.addUnitToArmy(e, num);
+            // if (teamID == TeamID.AI)
+            // {
+            //     Debug.Log("Wave " + WM.getWaveNumber() + " - TC: added 1 unit");
+            //     Debug.Log("Wave " + WM.getWaveNumber() + " - TC: current bank: " + bank.getCurrentGold());
+
+            // }
+            return true;
+        }
+        else
+        {
+            if (teamID == TeamID.AI)
             {
                 Debug.Log("TC: cannot add unit");
-                return false;
+
             }
+            return false;
+        }
     }
 
 

@@ -18,6 +18,11 @@ public class Spawner : MonoBehaviour
 
     private Dictionary<UnitEnum, int> armyPool = new Dictionary<UnitEnum, int>();
 
+    public int getArmySize()
+    {
+        return armyPool[UnitEnum.Soldier] + armyPool[UnitEnum.Tank];
+    }
+
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -32,22 +37,19 @@ public class Spawner : MonoBehaviour
 
         setupArmyDict();
 
-        WM.NextWave += SpawnWave;
+        WM.SpawnerAction += SpawnWave;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
     private void setupArmyDict()
     {
-
-
         armyPool.Add(UnitEnum.Soldier, 1);
         armyPool.Add(UnitEnum.Tank, 0);
     }
 
     public void addUnitToArmy(UnitEnum unit, int num)
     {
-        
         armyPool[unit] += num;
     }
 
@@ -60,7 +62,7 @@ public class Spawner : MonoBehaviour
     private Unit pickPrefab(KeyValuePair<UnitEnum, int> unit)
     {
 
-        Debug.Log("SpawnUnit: pickPrefab() " + unit.Key);
+        // Debug.Log("SpawnUnit: pickPrefab() " + unit.Key);
         switch (unit.Key)
         {
             case UnitEnum.Soldier:

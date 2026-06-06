@@ -6,26 +6,35 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI incomeTxt;
     [SerializeField] private TextMeshProUGUI currentGoldTxt;
     [SerializeField] private TextMeshProUGUI waveTimerTxt;
+    [SerializeField] private TextMeshProUGUI aiArmySizeTxt;
+    [SerializeField] private TextMeshProUGUI aiIncomeTxt;
 
     private string incomeTxtString = "Income: ";
     private string currentGoldTxtString = "Gold: ";
-
     private string waveTimerTxtString = "Wave ";
+     private string AiIncomeTxtString = "Ai Income: ";
+    private string aiArmySizeTxtString = "Ai Wave +";
     private TeamController playerTC;
+    private TeamController aiTC;
     private WaveManager WM;
 
     // ----------------------------------------------------------------------------------------------------------------
 
 
-    public void Initialize(WaveManager WM, TeamController playerTC)
+    public void Initialize(WaveManager WM, TeamController playerTC, TeamController aiTC)
     {
         this.playerTC = playerTC;
+        this.aiTC = aiTC;
         this.WM = WM;
         // Debug.Log(playerTC.getIsBankInitialized());
 
         WM.NextWave += waveHandler;
+        WM.SpawnerAction += onSpawn;
+
         incomeTxt.text = incomeTxtString + playerTC.getBankWaveIncome().ToString();
         currentGoldTxt.text = currentGoldTxtString + playerTC.getBankCurrentGold().ToString();
+        aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
+        aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
     }
 
     private void Update()
@@ -36,6 +45,7 @@ public class HUDController : MonoBehaviour
         int sec = Mathf.FloorToInt(WM.getTimeToWave() % 60);
         string timerText = $"{min:00}:{sec:00}";
         waveTimerTxt.text = waveTimerTxt.text = waveTimerTxtString + WM.getWaveNumber().ToString() + ": " + timerText;
+        
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -56,12 +66,18 @@ public class HUDController : MonoBehaviour
     public void growEconomy()
     {
         Debug.Log("HUDController: Grow Econ heard");
-        playerTC.purchaseHandler(100);
+        playerTC.purchaseHandler(200);
         incomeTxt.text = incomeTxtString + playerTC.getBankWaveIncome().ToString();
     }
 
     private void waveHandler()
     {
         waveTimerTxt.text = waveTimerTxtString + WM.getWaveNumber().ToString() + ": " + WM.getTimerInterval().ToString();
+    }
+
+    private void onSpawn()
+    {
+        aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
+        aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
     }
 }

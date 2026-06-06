@@ -37,7 +37,11 @@ public class Bank : MonoBehaviour
         WM.NextWave += waveIncomeHandler;
 
         this.isInitialized = true;
-        Debug.Log("Bank: current gold: " + currentGold);
+        // if (teamID == TeamID.AI)
+        // {
+        //     Debug.Log("Wave " + WM.getWaveNumber() + "- Bank: current gold: " + currentGold);
+
+        // }
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -46,7 +50,11 @@ public class Bank : MonoBehaviour
     private void waveIncomeHandler()
     {
         currentGold += waveIncome;
-        Debug.Log("Bank: current gold: " + currentGold + " (" + gameObject.name + ")");
+        // if (teamID == TeamID.AI)
+        // {
+        //     Debug.Log("Wave " + WM.getWaveNumber() + "- Bank: current gold: " + currentGold + " (" + gameObject.name + ")");
+
+        // }
     }
 
     public bool canAfford(int unitPrice)
@@ -60,7 +68,9 @@ public class Bank : MonoBehaviour
 
     public void modifyGold(int amt)
     {
+        // Debug.Log("1. Bank current gold = "+ currentGold);
         currentGold += amt;
+        // Debug.Log("2. Bank current gold = "+ currentGold);
     }
 
     public void modifyWaveGold(int amt)
