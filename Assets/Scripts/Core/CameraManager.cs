@@ -10,13 +10,13 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private Tilemap tilemap;
 
-    [SerializeField] private  int mapPadding;
+    [SerializeField] private int mapPadding;
 
-    [SerializeField] private  int panThresholdPercent;
+    [SerializeField] private int panThresholdPercent;
 
-    [SerializeField] private  float cameraSpeedMouse;
+    [SerializeField] private float cameraSpeedMouse;
 
-    [SerializeField] private  float cameraSpeedKeyBoard;
+    [SerializeField] private float cameraSpeedKeyBoard;
 
     private enum Bumper
     {
@@ -58,6 +58,9 @@ public class CameraManager : MonoBehaviour
     private float zoomMax = 10;
     private float zoomMin = 1;
 
+    // ----------------------------------------------------------------------------------------------------------------
+
+
     void Start()
     {
         // establishes left and right bumper for camera movement
@@ -86,6 +89,21 @@ public class CameraManager : MonoBehaviour
         minY = bounds.min.y + camHalfHeight - mapPadding;
         maxY = bounds.max.y - camHalfHeight + mapPadding;
     }
+
+        // Update is called once per frame
+    void Update()
+    {
+        // establishes how fast the camera moves
+        mtime = Time.deltaTime;
+
+        moveMapWithMouse();
+        moveMapWithKeyboard();
+
+    }
+
+
+    // ----------------------------------------------------------------------------------------------------------------
+
 
     private void moveMapWithKeyboard()
     {
@@ -128,7 +146,7 @@ public class CameraManager : MonoBehaviour
         Vector3 camPos = cam.transform.position;
 
         float currentZoom = cam.orthographicSize;
-        float scrollDelta = Input.mouseScrollDelta.y * mtime *100;
+        float scrollDelta = Input.mouseScrollDelta.y * mtime * 100;
 
         if (scrollDelta != 0)
         {
@@ -136,7 +154,7 @@ public class CameraManager : MonoBehaviour
             float newZoom = currentZoom + scrollDelta;
             float zoomBoundary = Mathf.Clamp(newZoom, zoomMin, zoomMax);
             cam.orthographicSize = zoomBoundary;
-            
+
         }
 
 
@@ -207,15 +225,5 @@ public class CameraManager : MonoBehaviour
         return mvSpdCalc;
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        // establishes how fast the camera moves
-        mtime = Time.deltaTime;
-
-        moveMapWithMouse();
-        moveMapWithKeyboard();
-
-    }
 }
+

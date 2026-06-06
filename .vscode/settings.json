@@ -60,6 +60,15 @@
         "*.asset": "yaml",
         "*.meta": "yaml",
         "*.prefab": "yaml",
+        "*.unity": "yaml",
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.sln": "*.csproj",
+        "*.slnx": "*.csproj"
+    },
+    "dotnet.defaultSolution": "rts-prototype.slnx",
+    "dotnet.enableWorkspaceBasedDevelopment": false
         "*.unity": "yaml"
     },
     "explorer.fileNesting.enabled": true,

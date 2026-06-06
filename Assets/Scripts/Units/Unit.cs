@@ -1,103 +1,171 @@
 using System.Collections;
+using System.Security.Cryptography;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : MonoBehaviour, IDamagable
 {
-    
-    [SerializeField] private Building enemyBase;
-    private Vector3 targetPOS; 
 
-    private bool isMoving;
+    private Transform opposingBasePos;
+    private Transform targetPOS;
+    private CombatController CC;
+    private UnitEnum unitType;
+    private int maxHp;
+    private int unitDmg;
+    private float unitMvSpd;
+    private float unitAtkSpd;
+    private float detectRng;
+    private float atkRng;
+    private TeamID teamID;
+    private int currentHP;
+    private bool isAlive;
+    private bool isBase = false;
 
-    private bool isAttacking;
-    private float unitMvSpd = 1f;
-    private float unitAtkSpd = 1.5f;
-    private float mtime;
+    // ----------------------------------------------------------------------------------------------------------------
 
-    void Start()
+    public TeamID getTeamID()
     {
-        setEnemyBasePOS();
-        isMoving = true;
-        isAttacking = false;
+        return this.teamID;
     }
 
-
-
-    void setEnemyBasePOS()
+    public UnitEnum getUnitType()
     {
-        
-        Debug.Log("Unit: enemyBase = " + enemyBase);
-        if(enemyBase != null)
-        {
-            this.targetPOS = enemyBase.POS;
-            Debug.Log("Unit: target base at pos: " + targetPOS);
-        }
-        else
-        {
-            Debug.Log("Unit: Bulding script not found");
-        }
+        return this.unitType;
     }
 
-    void move()
+    public bool getIsAlive()
     {
-        Vector3 moveDelta = Vector3.right * unitMvSpd * mtime;
-        Vector3 newPos = transform.position + moveDelta;
-        transform.position = new Vector3(newPos.x, newPos.y, newPos.z);
+        return this.isAlive;
     }
 
-    void getTarget()
+    public float getAtkSpd()
     {
-        
+        return unitAtkSpd;
     }
 
-    IEnumerator attack(Building target)
+    public int getDmg()
     {
-        isAttacking = true;
-
-        Debug.Log("Unit: attacking: " + target.gameObject.name);
-
-        while (target != null)
-        {
-            Debug.Log("Unit: swinging on target");
-            target.takeDamage(100);
-
-            yield return new WaitForSeconds(unitAtkSpd);
-        }
-        Debug.Log("Unit: attack while loop over");
-        isAttacking = false;
+        return unitDmg;
     }
 
-    void OnCollisionEnter2D(Collision2D target)
+    public float getDetectRange()
     {
-        Debug.Log("Unit: coliding with: " + target.gameObject.name);
-        if (isMoving)
-        {
-            isMoving = false;
-            unitMvSpd = 0;
-        }
-
-        StartCoroutine(attack(target.gameObject.GetComponent<Building>()));
+        return detectRng;
     }
 
-    void OnCollisionExit2D(Collision2D collision)
+    public float getAtkRng()
     {
-        Debug.Log("Unit: exiting collision");
-        if (!isMoving)
-        {
-            isMoving = true;
-            unitMvSpd = 1;
-        } 
-   
+        return atkRng;
     }
 
+    public bool getIsBase()
+    {
+        return this.isBase;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
 
 
+    public void Initialize(Transform pos, Color spriteColor, TeamID teamID, UnitEnum unitType)
+    {
+        this.opposingBasePos = pos;
+        this.targetPOS = opposingBasePos;
+        this.GetComponent<SpriteRenderer>().color = spriteColor;
+        this.teamID = teamID;
+        this.unitType = unitType;
+
+        CC = GetComponent<CombatController>();
+        setupUnit();
+        CC.Initialize(this, atkRng);
+
+        // if (this.name == "Player Unit 1")
+        // {
+        //     this.GetComponent<SpriteRenderer>().color = Color.magenta;
+        // }
+    }
 
     void Update()
     {
-        mtime = Time.deltaTime;
-        move();
+        if (CC.getCState() == CombatStateEnum.Moving)
+        {
+            setMoveTarget();
+            move(targetPOS);
+        }
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+    private void setupUnit()
+    {
+
+        UnitData data = UnitRegistry.getUnitData(unitType);
+
+        this.maxHp = data.MaxHP;
+        this.unitDmg = data.Dmg;
+        this.unitAtkSpd = data.AtkSpd;
+        this.unitMvSpd = data.MvSpd;
+        this.detectRng = data.DetectRange;
+        this.atkRng = data.AtkRange;
+
+        this.currentHP = maxHp;
+        this.isAlive = true;
+    }
+
+    private void move(Transform targetPOS)
+    {
+        if (CC.getCState() == CombatStateEnum.Moving)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPOS.position, unitMvSpd * Time.deltaTime);
+
+        }
+    }
+
+    private void setMoveTarget()
+    {
+        if (!CC.getTargetPOS())
+        {
+            targetPOS = opposingBasePos;
+            if (this.name == "Player Unit 1")
+            {
+                // Debug.Log(this.name + " targeting oppsoing base");
+
+            }
+        }
+        else
+        {
+            targetPOS = CC.getTargetPOS();
+            if (this.name == "Player Unit 1")
+            {
+                // Debug.Log(this.name + " targeting a unit");
+
+            }
+        }
+    }
+
+
+
+    public void TakeDamage(int dmgVal)
+    {
+
+        int updatedHp = currentHP - dmgVal;
+        int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
+        currentHP = hpBounds;
+        // Debug.Log(this.name + " Unit: dmg - hp at: " + currentHP);
+
+        if (currentHP == 0 && this.isAlive == true)
+        {
+            DeathHandler();
+        }
+
+    }
+
+    private void DeathHandler()
+    {
+        // unit destroyed logic 
+        this.isAlive = false;
+        Destroy(gameObject);
+        // Debug.Log(this.name + " Unit Death");
+
     }
 }
