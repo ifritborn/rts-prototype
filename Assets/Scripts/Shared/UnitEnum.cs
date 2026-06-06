@@ -1,4 +1,5 @@
 public enum UnitEnum
 {
-    BaseUnit
+    Soldier,
+    Tank
 }

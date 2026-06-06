@@ -30,6 +30,11 @@ public class Building : MonoBehaviour, IDamagable
         return this.isAlive;
     }
 
+    public bool getIsBase()
+    {
+        return this.isBase;
+    }
+
     // ----------------------------------------------------------------------------------------------------------------
 
 

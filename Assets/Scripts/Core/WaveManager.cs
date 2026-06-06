@@ -12,10 +12,28 @@ public class WaveManager : MonoBehaviour
     private Spawner pSpawner;
     private Spawner aiSpawner;
     private float timerInterval = 15f;
+    private float timeToWave;
     private GameState state;
     private int waveNumber;
 
     public event Action NextWave;
+    public event Action AIAction;
+    public event Action SpawnerAction;
+
+    public int getWaveNumber()
+    {
+        return waveNumber;
+    }
+
+    public float getTimerInterval()
+    {
+        return timerInterval;
+    }
+
+    public float getTimeToWave()
+    {
+        return timeToWave;
+    }
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -27,6 +45,7 @@ public class WaveManager : MonoBehaviour
         this.ai = ai;
 
         waveNumber = 0;
+        timeToWave = timerInterval;
         GSM.GameStateChange += GameStateChangeHandler;
         GameStateChangeHandler(GSM.getGameState());
     }
@@ -57,12 +76,19 @@ public class WaveManager : MonoBehaviour
         while (this.state == GameState.GameInProgress)
         {
             NextWave?.Invoke();
+            SpawnerAction?.Invoke();
+            AIAction?.Invoke();
+            
             waveNumber += 1;
-            // Debug.Log("WM: wave num: " + waveNumber);
-            yield return new WaitForSeconds(timerInterval);
+            while (timeToWave > 0)
+            {
+                timeToWave -= Time.deltaTime;
+                yield return null;
+            }
+            // Debug.Log("WM: wave num: " + waveNumber); 
+
+            timeToWave = timerInterval;
         }
-
-
     }
 
 

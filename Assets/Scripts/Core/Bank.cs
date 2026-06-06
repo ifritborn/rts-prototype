@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+
 
 public class Bank : MonoBehaviour
 {
@@ -8,10 +7,21 @@ public class Bank : MonoBehaviour
     private WaveManager WM;
     private int currentGold;
     private TeamID teamID;
+    public bool isInitialized = false;
+
+    public bool getIsInitialized()
+    {
+        return isInitialized;
+    }
 
     public int getCurrentGold()
     {
         return currentGold;
+    }
+
+    public int getWaveIncome()
+    {
+        return waveIncome;
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -25,6 +35,13 @@ public class Bank : MonoBehaviour
         waveIncome = 100;
 
         WM.NextWave += waveIncomeHandler;
+
+        this.isInitialized = true;
+        // if (teamID == TeamID.AI)
+        // {
+        //     Debug.Log("Wave " + WM.getWaveNumber() + "- Bank: current gold: " + currentGold);
+
+        // }
     }
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -33,24 +50,33 @@ public class Bank : MonoBehaviour
     private void waveIncomeHandler()
     {
         currentGold += waveIncome;
-        // Debug.Log("Bank: current gold: " + currentGold + " (" + gameObject.name + ")");
+        // if (teamID == TeamID.AI)
+        // {
+        //     Debug.Log("Wave " + WM.getWaveNumber() + "- Bank: current gold: " + currentGold + " (" + gameObject.name + ")");
+
+        // }
     }
 
     public bool canAfford(int unitPrice)
     {
-        bool canBuy = false;
         if (unitPrice <= currentGold)
         {
-            canBuy = true;
+            return true;
         }
-        return canBuy;
+        return false;
     }
 
     public void modifyGold(int amt)
     {
+        // Debug.Log("1. Bank current gold = "+ currentGold);
         currentGold += amt;
+        // Debug.Log("2. Bank current gold = "+ currentGold);
     }
 
+    public void modifyWaveGold(int amt)
+    {
+        this.waveIncome += amt;
+    }
 
 
 }
