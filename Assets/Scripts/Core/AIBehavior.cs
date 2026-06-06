@@ -16,7 +16,7 @@ public class AIBehavior : MonoBehaviour
         // WM.AIAction += soldierEcon;
         // WM.AIAction += tankRush;
         // WM.AIAction += soldierRush;
-        // chooseAI();
+        chooseAI();
     }
 
     // ----------------------------------------------------------------------------------------------------------------
