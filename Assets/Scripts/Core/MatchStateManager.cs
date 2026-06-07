@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class GameStateManager : MonoBehaviour
+public class MatchStateManager : MonoBehaviour
 {
 
 
-    private GameState CurrentGameState;
+    private MatchState CurrentMatchState;
 
     [SerializeField] private TeamController player;
     private Building playerBase;
@@ -15,8 +15,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private WaveManager WM;
 
     [SerializeField] private HUDController HUD;
-
-    public event Action<GameState> GameStateChange;
+    [SerializeField] private GameSceneManager GSM;
+    public event Action<MatchState> MatchStateChange;
 
     // ----------------------------------------------------------------------------------------------------------------
 
@@ -27,8 +27,8 @@ public class GameStateManager : MonoBehaviour
         playerBase = player.getBase();
 
         AIB = ai.GetComponent<AIBehavior>();
-        // Debug.Log("GM: Awake - gamestate = " + getGameState());
-        setGameState(GameState.GameStart);
+        // Debug.Log("GM: Awake - MatchState = " + getMatchState());
+        setMatchState(MatchState.GameStart);
 
 
     }
@@ -49,32 +49,31 @@ public class GameStateManager : MonoBehaviour
         player.getBase().BaseIsDead += EndGame;
         ai.getBase().BaseIsDead += EndGame;
         AIB.Initialize(WM, ai);
-        setGameState(GameState.GameInProgress);
+        setMatchState(MatchState.GameInProgress);
         // Time.timeScale = 0.5f;
-        // Debug.Log("GM: Start - gamestate = " + getGameState());
+        // Debug.Log("GM: Start - MatchState = " + getMatchState());
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
 
-    public GameState getGameState()
+    public MatchState getMatchState()
     {
-        return CurrentGameState;
+        return CurrentMatchState;
     }
 
-    private void setGameState(GameState state)
+    private void setMatchState(MatchState state)
     {
-        CurrentGameState = state;
-        GameStateChange?.Invoke(CurrentGameState);
+        CurrentMatchState = state;
+        MatchStateChange?.Invoke(CurrentMatchState);
     }
     public void EndGame()
     {
         // Debug.Log("GM: EndGame() called");
-        setGameState(GameState.GameEnd);
+        setMatchState(MatchState.GameEnd);
         player.getBase().BaseIsDead -= EndGame;
         ai.getBase().BaseIsDead -= EndGame;
         // Debug.Log("GM: Change Sceen Needed Here Eventually");
-        // TODO: This logic should not make it into a build
-        UnityEditor.EditorApplication.isPlaying = false;
+        GSM.LoadThisScene("EndCard");
     }
 }
