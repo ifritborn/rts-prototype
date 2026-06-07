@@ -12,8 +12,8 @@ public class HUDController : MonoBehaviour
     private string incomeTxtString = "Income: ";
     private string currentGoldTxtString = "Gold: ";
     private string waveTimerTxtString = "Wave ";
-     private string AiIncomeTxtString = "Ai Income: ";
-    private string aiArmySizeTxtString = "Ai Wave +";
+    //  private string AiIncomeTxtString = "Ai Income: ";
+    // private string aiArmySizeTxtString = "Ai Wave +";
     private TeamController playerTC;
     private TeamController aiTC;
     private WaveManager WM;
