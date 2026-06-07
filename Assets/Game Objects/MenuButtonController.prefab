@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8040704406499159690}
   - component: {fileID: 1048844155404007513}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: MenuButtonController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

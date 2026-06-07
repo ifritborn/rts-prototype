@@ -11,7 +11,7 @@ public class MatchStateManager : MonoBehaviour
     private Building aiBase;
     [SerializeField] private WaveManager WM;
     [SerializeField] private HUDController HUD;
-    [SerializeField] private GameSceneManager GSM;
+    [SerializeField] private MenuButtonController MBC;
     public event Action<MatchState> MatchStateChange;
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -65,6 +65,6 @@ public class MatchStateManager : MonoBehaviour
         player.getBase().BaseIsDead -= EndGame;
         ai.getBase().BaseIsDead -= EndGame;
         // Debug.Log("GM: Change Sceen Needed Here Eventually");
-        GSM.LoadThisScene("EndCard");
+        MBC.LoadThisScene("EndCard");
     }
 }

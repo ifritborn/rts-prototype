@@ -1,31 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameSceneManager : MonoBehaviour
+public class MenuButtonController : MonoBehaviour
 {
-    public static GameSceneManager Instance { get; private set; }
 
     // ----------------------------------------------------------------------------------------------------------------
 
-    private void Awake()
-    {
-        Debug.Log($"GSM Awake: {gameObject.name}, Instance={Instance}");
-
-        if (Instance != null && Instance != this)
-        {
-            Debug.Log($"Duplicate GSM destroyed: {gameObject.name}");
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        Debug.Log($"GSM persisted: {gameObject.name}");
-    }
 
 
-
-    // ----------------------------------------------------------------------------------------------------------------
+   // ----------------------------------------------------------------------------------------------------------------
 
 
     public void StartGame()

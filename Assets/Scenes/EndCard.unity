@@ -385,7 +385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8737648916180051438, guid: 2709bc98d93e03a4a8767ac58eec49c5, type: 3}
       propertyPath: m_Name
-      value: SceneManager
+      value: MenuButtonController
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
