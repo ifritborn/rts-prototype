@@ -6,14 +6,14 @@ public class HUDController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI incomeTxt;
     [SerializeField] private TextMeshProUGUI currentGoldTxt;
     [SerializeField] private TextMeshProUGUI waveTimerTxt;
-    [SerializeField] private TextMeshProUGUI aiArmySizeTxt;
-    [SerializeField] private TextMeshProUGUI aiIncomeTxt;
+    // [SerializeField] private TextMeshProUGUI aiArmySizeTxt;
+    // [SerializeField] private TextMeshProUGUI aiIncomeTxt;
 
     private string incomeTxtString = "Income: ";
     private string currentGoldTxtString = "Gold: ";
     private string waveTimerTxtString = "Wave ";
-     private string AiIncomeTxtString = "Ai Income: ";
-    private string aiArmySizeTxtString = "Ai Wave +";
+    //  private string AiIncomeTxtString = "Ai Income: ";
+    // private string aiArmySizeTxtString = "Ai Wave +";
     private TeamController playerTC;
     private TeamController aiTC;
     private WaveManager WM;
@@ -33,8 +33,8 @@ public class HUDController : MonoBehaviour
 
         incomeTxt.text = incomeTxtString + playerTC.getBankWaveIncome().ToString();
         currentGoldTxt.text = currentGoldTxtString + playerTC.getBankCurrentGold().ToString();
-        aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
-        aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
+        // aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
+        // aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
     }
 
     private void Update()
@@ -77,7 +77,7 @@ public class HUDController : MonoBehaviour
 
     private void onSpawn()
     {
-        aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
-        aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
+        // aiArmySizeTxt.text = aiArmySizeTxtString + aiTC.getSpawner().getArmySize();
+        // aiIncomeTxt.text = AiIncomeTxtString + aiTC.getBankWaveIncome().ToString();
     }
 }

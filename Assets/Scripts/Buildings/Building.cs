@@ -44,10 +44,6 @@ public class Building : MonoBehaviour, IDamagable
         this.isAlive = true;
     }
 
-    private void OnDestroy()
-    {
-    }
-
     // ----------------------------------------------------------------------------------------------------------------
 
     private void DeathHandler()
