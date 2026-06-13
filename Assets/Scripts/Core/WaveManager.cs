@@ -1,18 +1,19 @@
 using System;
 using System.Collections;
+using UnityEditor.UI;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
 
-    private MatchStateManager MSM;
+    private GameStateManager GSM;
     private TeamController player;
     private TeamController ai;
     private Spawner pSpawner;
     private Spawner aiSpawner;
     private float timerInterval = 15f;
     private float timeToWave;
-    private MatchState state;
+    private GameState state;
     private int waveNumber;
 
     public event Action NextWave;
@@ -37,42 +38,42 @@ public class WaveManager : MonoBehaviour
     // ----------------------------------------------------------------------------------------------------------------
 
 
-    public void Initialize(MatchStateManager MSM, TeamController player, TeamController ai)
+    public void Initialize(GameStateManager GSM, TeamController player, TeamController ai)
     {
-        this.MSM = MSM;
+        this.GSM = GSM;
         this.player = player;
         this.ai = ai;
 
         waveNumber = 0;
         timeToWave = timerInterval;
-        MSM.MatchStateChange += MatchStateChangeHandler;
-        MatchStateChangeHandler(MSM.getMatchState());
+        GSM.GameStateChange += GameStateChangeHandler;
+        GameStateChangeHandler(GSM.getGameState());
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
 
-    private void MatchStateChangeHandler(MatchState state)
+    private void GameStateChangeHandler(GameState state)
     {
         this.state = state;
-        if (state == MatchState.GameStart)
+        if (state == GameState.GameStart)
         {
 
         }
-        else if (state == MatchState.GameInProgress)
+        else if (state == GameState.GameInProgress)
         {
             StartCoroutine(WaveSystem(timerInterval));
 
         }
-        else if (state == MatchState.GameEnd)
+        else if (state == GameState.GameEnd)
         {
-            MSM.MatchStateChange -= MatchStateChangeHandler;
+            GSM.GameStateChange -= GameStateChangeHandler;
         }
     }
 
     IEnumerator WaveSystem(float timerInterval)
     {
-        while (this.state == MatchState.GameInProgress)
+        while (this.state == GameState.GameInProgress)
         {
             NextWave?.Invoke();
             SpawnerAction?.Invoke();
@@ -89,4 +90,10 @@ public class WaveManager : MonoBehaviour
             timeToWave = timerInterval;
         }
     }
+
+
+
+
+
+
 }
