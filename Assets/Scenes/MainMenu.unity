@@ -873,9 +873,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Instructions:\nEvery wave you gain gold to buy units. \nYou  must decide
-    if you want to grow your army or your economy. \nDefeat the opposing base to
-    win!"
+  m_text: 'Instructions:
+
+    You control the Blue Team.
+
+    Every wave, both sides
+    send units into the lane automatically.
+
+    Spend gold to grow your economy
+    or build your army.
+
+    Push the battle to the enemy base and destroy it to
+    win.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
