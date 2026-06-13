@@ -34,6 +34,10 @@ public class Building : MonoBehaviour, IDamagable
     {
         return this.isBase;
     }
+    public int getCurrentHp()
+    {
+        return currentHealth;
+    }
 
     // ----------------------------------------------------------------------------------------------------------------
 

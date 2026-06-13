@@ -7,11 +7,12 @@ public class TeamController : MonoBehaviour
     [SerializeField] private Building myBase;
     [SerializeField] private Spawner spawner;
     [SerializeField] private Bank bank;
+    [SerializeField] private BaseHP baseHP;
     private WaveManager WM;
     private Color teamColor;
     private Building opposingBase;
     private TeamID teamID;
-
+    
     public bool isInitialized = false;
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -77,6 +78,8 @@ public class TeamController : MonoBehaviour
         myBase.Initialize(teamID);
         spawner.Initialize(WM, opposingBase, teamColor, spawner.transform, teamID);
         bank.Initialize(WM, teamID);
+        Debug.Log("TC: myBase= " + myBase);
+        baseHP.Initialize(myBase);
 
     }
 
