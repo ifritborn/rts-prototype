@@ -1,63 +1,96 @@
+using System;
 using System.Collections;
-using UnityEditor.UI;
 using UnityEngine;
 
 public class WaveManager : MonoBehaviour
 {
-    [SerializeField] Unit playerUnits;
-    [SerializeField] GameManager GM;
 
-    private int spawnCount = 1;
+    private MatchStateManager MSM;
+    private TeamController player;
+    private TeamController ai;
+    private Spawner pSpawner;
+    private Spawner aiSpawner;
+    private float timerInterval = 15f;
+    private float timeToWave;
+    private MatchState state;
+    private int waveNumber;
 
-    private Vector3 playerSpawnPos;
-    private Quaternion playerSpawnRotation;
+    public event Action NextWave;
+    public event Action AIAction;
+    public event Action SpawnerAction;
 
-    void Start()
+    public int getWaveNumber()
     {
-        playerSpawnPos = transform.position;
-        playerSpawnRotation = transform.rotation;
-        GM.GameStateChange += GameStateChangeHandler;
-        
+        return waveNumber;
     }
 
-    void Update()
+    public float getTimerInterval()
     {
-
+        return timerInterval;
     }
 
-    private void GameStateChangeHandler(GameManager.GameState state)
+    public float getTimeToWave()
     {
-        if (state == GameManager.GameState.GameStart)
+        return timeToWave;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    public void Initialize(MatchStateManager MSM, TeamController player, TeamController ai)
+    {
+        this.MSM = MSM;
+        this.player = player;
+        this.ai = ai;
+
+        waveNumber = 0;
+        timeToWave = timerInterval;
+        MSM.MatchStateChange += MatchStateChangeHandler;
+        MatchStateChangeHandler(MSM.getMatchState());
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    private void MatchStateChangeHandler(MatchState state)
+    {
+        this.state = state;
+        if (state == MatchState.GameStart)
         {
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
+
         }
-        else if (state == GameManager.GameState.GameInProgress)
+        else if (state == MatchState.GameInProgress)
         {
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
-            StartCoroutine(SpawnUnit());
+            StartCoroutine(WaveSystem(timerInterval));
+
         }
-        else if (state == GameManager.GameState.GameEnd)
+        else if (state == MatchState.GameEnd)
         {
-            Debug.Log("WaveManager: SpawnUnit(): GameState = " + GM.getGameState());
-            GM.GameStateChange -= GameStateChangeHandler;
+            MSM.MatchStateChange -= MatchStateChangeHandler;
         }
     }
 
-    IEnumerator SpawnUnit()
+    IEnumerator WaveSystem(float timerInterval)
     {
-        while (spawnCount > 0)
+        while (this.state == MatchState.GameInProgress)
         {
+            NextWave?.Invoke();
+            SpawnerAction?.Invoke();
+            AIAction?.Invoke();
             
-            if (GM.getGameState() == GameManager.GameState.GameInProgress)
+            waveNumber += 1;
+            while (timeToWave > 0)
             {
-                Debug.Log("WaveManager: SpawnUnit(): spawnCount: " + spawnCount);
-                Instantiate(playerUnits, playerSpawnPos, playerSpawnRotation);
-                
+                timeToWave -= Time.deltaTime;
+                yield return null;
             }
-            yield return new WaitForSeconds(1f);
-            spawnCount -= 1;
+            // Debug.Log("WM: wave num: " + waveNumber); 
+
+            timeToWave = timerInterval;
         }
     }
+
+
 
 
 

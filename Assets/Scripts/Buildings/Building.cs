@@ -1,25 +1,60 @@
 using System;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+public class Building : MonoBehaviour, IDamagable
 {
 
     [SerializeField] private bool isBase;
     [SerializeField] private int maxHp;
     private int currentHealth;
-
-    public Vector3 POS;
-
+    private TeamID teamID;
+    private bool isAlive;
     public event Action BaseIsDead;
 
-    void Start()
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    public void Initialize(TeamID teamID)
     {
-        POS = transform.position;
-        Debug.Log("Building: base pos = " + POS);
-        currentHealth = maxHp;
+        this.teamID = teamID;
     }
 
-    private void deathHandler()
+    public TeamID getTeamID()
+    {
+        return this.teamID;
+    }
+
+    public bool getIsAlive()
+    {
+        Debug.Log("Building: am I alive? - " + isAlive );
+        return this.isAlive;
+    }
+
+    public bool getIsBase()
+    {
+        return this.isBase;
+    }
+    public int getCurrentHp()
+    {
+        return currentHealth;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    void Awake()
+    {
+        currentHealth = maxHp;
+        this.isAlive = true;
+    }
+
+    private void OnDestroy()
+    {
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+    private void DeathHandler()
     {
         if (!isBase)
         {
@@ -28,32 +63,29 @@ public class Building : MonoBehaviour
         }
         else
         {
-            // emit base destroyed event to game manager
+            // emit base destroyed event to game manager3
+            this.isAlive = false;
             BaseIsDead?.Invoke();
             Debug.Log("Building: Death Event Triggered");
 
         }
     }
-    public void takeDamage(int dmgVal)
+    public void TakeDamage(int dmgVal)
     {
 
         int updatedHp = currentHealth - dmgVal;
         int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHealth = hpBounds;
-        Debug.Log("Building: taking dmg, hp at "+currentHealth);
+        Debug.Log("Building: taking dmg, hp at " + currentHealth);
 
-        if (currentHealth == 0)
+        if (currentHealth == 0 && this.isAlive == true)
         {
-            deathHandler();
+            DeathHandler();
         }
 
     }
 
-    private void OnDestroy()
-    {
 
-
-    }
 
 
 
