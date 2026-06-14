@@ -44,7 +44,7 @@ public class Spawner : MonoBehaviour
 
     private void setupArmyDict()
     {
-        armyPool.Add(UnitEnum.Soldier, 300);
+        armyPool.Add(UnitEnum.Soldier, 1);
         armyPool.Add(UnitEnum.Tank, 0);
     }
 
