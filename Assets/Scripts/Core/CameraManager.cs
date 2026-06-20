@@ -3,7 +3,6 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-
 public class CameraManager : MonoBehaviour
 {
 
@@ -17,6 +16,7 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private float cameraSpeedMouse;
 
     [SerializeField] private float cameraSpeedKeyBoard;
+    [SerializeField] private float dragSensitivity;
 
     private enum Bumper
     {
@@ -58,6 +58,8 @@ public class CameraManager : MonoBehaviour
     private float zoomMax = 12.5f;
     private float zoomMin = 1;
 
+    private Vector3 mouseLastPos;
+
     // ----------------------------------------------------------------------------------------------------------------
 
 
@@ -90,7 +92,7 @@ public class CameraManager : MonoBehaviour
         maxY = bounds.max.y - camHalfHeight + mapPadding;
     }
 
-        // Update is called once per frame
+    // Update is called once per frame
     void Update()
     {
         // establishes how fast the camera moves
@@ -140,6 +142,8 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+
+
     private void moveMapWithMouse()
     {
         Vector3 mpos = Input.mousePosition;
@@ -157,45 +161,66 @@ public class CameraManager : MonoBehaviour
             cam.orthographicSize = zoomBoundary;
         }
 
-
-        // Move camera to the Right
-        if (mpos.x <= Screen.width && mpos.x >= rBumper)
+        if (Input.GetMouseButtonDown(2))
         {
-            float mvSpdCalc = speedMult(mpos, Bumper.Right, rBumper, RLThresh);
-            Vector3 moveDelta = Vector3.right * mvSpdCalc;
-            Vector3 newPos = transform.position + moveDelta;
-            float rBoundry = Mathf.Clamp(newPos.x, minX, maxX);
-            transform.position = new Vector3(rBoundry, newPos.y, newPos.z);
+            mouseLastPos = Input.mousePosition;
+
         }
 
-        // Move camera to the Left
-        if (mpos.x >= 0 && mpos.x <= lBumper)
+        if (Input.GetMouseButton(2))
         {
-            float mvSpdCalc = speedMult(mpos, Bumper.Left, lBumper, RLThresh);
-            Vector3 moveDelta = Vector3.left * mvSpdCalc;
-            Vector3 newPos = transform.position + moveDelta;
-            float lBoundry = Mathf.Clamp(newPos.x, minX, maxX);
-            transform.position = new Vector3(lBoundry, newPos.y, newPos.z);
+            Vector3 mouseCurrentPos = Input.mousePosition;
+            Vector3 mouseDelta = mouseCurrentPos - mouseLastPos;
+
+            Vector3 newPos = transform.position + (mouseDelta / dragSensitivity) * -1;
+
+            float clampX = Mathf.Clamp(newPos.x, minX, maxX);
+            float clampY = Mathf.Clamp(newPos.y, minY, maxY);
+            transform.position = new Vector3(clampX, clampY, newPos.z);
+            mouseLastPos = mouseCurrentPos;
         }
 
-        // Move camera up
-        if (mpos.y <= Screen.height && mpos.y >= topBumper)
+        if (!Input.GetMouseButton(2))
         {
-            float mvSpdCalc = speedMult(mpos, Bumper.Up, topBumper, UDThresh);
-            Vector3 moveDelta = Vector3.up * mvSpdCalc;
-            Vector3 newPos = transform.position + moveDelta;
-            float uBoundary = Mathf.Clamp(newPos.y, minY, maxY);
-            transform.position = new Vector3(newPos.x, uBoundary, newPos.z);
-        }
+            // At right edge move camera to the Right
+            if (mpos.x <= Screen.width && mpos.x >= rBumper)
+            {
+                float mvSpdCalc = speedMult(mpos, Bumper.Right, rBumper, RLThresh);
+                Vector3 moveDelta = Vector3.right * mvSpdCalc;
+                Vector3 newPos = transform.position + moveDelta;
+                float rBoundry = Mathf.Clamp(newPos.x, minX, maxX);
+                transform.position = new Vector3(rBoundry, newPos.y, newPos.z);
+            }
 
-        // Move camera down
-        if (mpos.y >= 0 && mpos.y <= botBumper)
-        {
-            float mvSpdCalc = speedMult(mpos, Bumper.Down, botBumper, UDThresh);
-            Vector3 moveDelta = Vector3.down * mvSpdCalc;
-            Vector3 newPos = transform.position + moveDelta;
-            float dBoundary = Mathf.Clamp(newPos.y, minY, maxY);
-            transform.position = new Vector3(newPos.x, dBoundary, newPos.z);
+            // At left edge move camera to the Left
+            if (mpos.x >= 0 && mpos.x <= lBumper)
+            {
+                float mvSpdCalc = speedMult(mpos, Bumper.Left, lBumper, RLThresh);
+                Vector3 moveDelta = Vector3.left * mvSpdCalc;
+                Vector3 newPos = transform.position + moveDelta;
+                float lBoundry = Mathf.Clamp(newPos.x, minX, maxX);
+                transform.position = new Vector3(lBoundry, newPos.y, newPos.z);
+            }
+
+            // At top edge move camera to the Left move camera up
+            if (mpos.y <= Screen.height && mpos.y >= topBumper)
+            {
+                float mvSpdCalc = speedMult(mpos, Bumper.Up, topBumper, UDThresh);
+                Vector3 moveDelta = Vector3.up * mvSpdCalc;
+                Vector3 newPos = transform.position + moveDelta;
+                float uBoundary = Mathf.Clamp(newPos.y, minY, maxY);
+                transform.position = new Vector3(newPos.x, uBoundary, newPos.z);
+            }
+
+            // At bottom edge move camera to the Left move camera down
+            if (mpos.y >= 0 && mpos.y <= botBumper)
+            {
+                float mvSpdCalc = speedMult(mpos, Bumper.Down, botBumper, UDThresh);
+                Vector3 moveDelta = Vector3.down * mvSpdCalc;
+                Vector3 newPos = transform.position + moveDelta;
+                float dBoundary = Mathf.Clamp(newPos.y, minY, maxY);
+                transform.position = new Vector3(newPos.x, dBoundary, newPos.z);
+            }
         }
     }
 
