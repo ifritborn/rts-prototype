@@ -41,6 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Terrain
+    uniqueID: 1792603273
+    locked: 0
+  - name: Lane
+    uniqueID: 2424810589
+    locked: 0
+  - name: BuildZone
+    uniqueID: 1637790477
+    locked: 0
+  - name: BaseZone
+    uniqueID: 1368627749
+    locked: 0
   - name: action
     uniqueID: 342427601
     locked: 0
