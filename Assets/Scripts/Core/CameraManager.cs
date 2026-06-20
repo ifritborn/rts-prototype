@@ -55,7 +55,7 @@ public class CameraManager : MonoBehaviour
     private float minY;
     private float maxY;
 
-    private float zoomMax = 10;
+    private float zoomMax = 12.5f;
     private float zoomMin = 1;
 
     // ----------------------------------------------------------------------------------------------------------------
@@ -148,13 +148,13 @@ public class CameraManager : MonoBehaviour
         float currentZoom = cam.orthographicSize;
         float scrollDelta = Input.mouseScrollDelta.y * mtime * 100;
 
+        // Mouse zoom controls using mouse wheel
         if (scrollDelta != 0)
         {
             //TODO: map bounds need to be adjusted on zoom otherwise when zoomed in cant scroll all the way to edge of map
-            float newZoom = currentZoom + scrollDelta;
+            float newZoom = currentZoom + (scrollDelta * -1);
             float zoomBoundary = Mathf.Clamp(newZoom, zoomMin, zoomMax);
             cam.orthographicSize = zoomBoundary;
-
         }
 
 

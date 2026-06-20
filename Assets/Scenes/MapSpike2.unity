@@ -22325,9 +22325,17 @@ PrefabInstance:
       propertyPath: tilemap
       value: 
       objectReference: {fileID: 1129473636}
+    - target: {fileID: 6955783758107695013, guid: fd624531148f41d42b6db7507f78bb79, type: 3}
+      propertyPath: cameraSpeedMouse
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 6955783758107695013, guid: fd624531148f41d42b6db7507f78bb79, type: 3}
+      propertyPath: cameraSpeedKeyBoard
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 9186852273696752563, guid: fd624531148f41d42b6db7507f78bb79, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 9186852273696752563, guid: fd624531148f41d42b6db7507f78bb79, type: 3}
       propertyPath: m_LocalPosition.y
