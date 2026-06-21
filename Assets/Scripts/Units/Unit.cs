@@ -110,6 +110,11 @@ public class Unit : MonoBehaviour, IDamagable
 
         this.currentHP = maxHp;
         this.isAlive = true;
+
+        if (teamID == TeamID.AI)
+        {
+            this.GetComponent<SpriteRenderer>().flipX = true; 
+        }
     }
 
     private void move(Transform targetPOS)

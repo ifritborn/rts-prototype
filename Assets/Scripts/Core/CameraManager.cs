@@ -17,6 +17,8 @@ public class CameraManager : MonoBehaviour
 
     [SerializeField] private float cameraSpeedKeyBoard;
     [SerializeField] private float dragSensitivity;
+    [SerializeField] private float zoomSensitivity;
+
 
     private enum Bumper
     {
@@ -150,7 +152,7 @@ public class CameraManager : MonoBehaviour
         Vector3 camPos = cam.transform.position;
 
         float currentZoom = cam.orthographicSize;
-        float scrollDelta = Input.mouseScrollDelta.y * mtime * 100;
+        float scrollDelta = Input.mouseScrollDelta.y * mtime * zoomSensitivity;
 
         // Mouse zoom controls using mouse wheel
         if (scrollDelta != 0)
