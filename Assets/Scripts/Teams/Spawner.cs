@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] Unit soldierPrefab;
     [SerializeField] Unit tankPrefab;
+    [SerializeField] Unit archerPrefab;
 
     private WaveManager WM;
     private Building opposingBase;
@@ -44,8 +45,9 @@ public class Spawner : MonoBehaviour
 
     private void setupArmyDict()
     {
-        armyPool.Add(UnitEnum.Soldier, 0);
+        armyPool.Add(UnitEnum.Soldier, 1);
         armyPool.Add(UnitEnum.Tank, 1);
+        armyPool.Add(UnitEnum.Archer, 1);
     }
 
     public void addUnitToArmy(UnitEnum unit, int num)
@@ -69,6 +71,8 @@ public class Spawner : MonoBehaviour
                 return soldierPrefab;
             case UnitEnum.Tank:
                 return tankPrefab;
+            case UnitEnum.Archer:
+                return archerPrefab;
             default:
                 return null;
         }

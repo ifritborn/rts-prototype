@@ -5,7 +5,7 @@ using UnityEngine;
 public class CombatController : MonoBehaviour
 {
 
-
+    [SerializeField] Projectile arrowPrefab;
     private CombatStateEnum CState;
     private Unit unit;
     private float unitAtkRng;
@@ -117,7 +117,7 @@ public class CombatController : MonoBehaviour
             IDamagable x = targetList[i].gameObject.GetComponent<IDamagable>();
 
 
-            
+
             if (t != null && x != null)
             {
                 if (isValidTarget(x))
@@ -130,7 +130,6 @@ public class CombatController : MonoBehaviour
                     // }
                     hasTarget = true;
                     currentTarget = t;
-                    
                     currentDamagable = x;
                     currentUnitTarget = u;
                     break;
@@ -164,7 +163,7 @@ public class CombatController : MonoBehaviour
             {
                 Collider2D collider = t.GetComponent<Collider2D>();
                 Vector2 closestpoint = collider.ClosestPoint(transform.position);
-                
+
                 dist = Vector2.Distance(transform.position, closestpoint);
                 // Debug.Log("dist = " + dist);
                 Debug.Log("atackHandler: base distance triggered");
@@ -174,14 +173,14 @@ public class CombatController : MonoBehaviour
                 dist = Vector2.Distance(transform.position, t.transform.position);
                 Debug.Log("atackHandler: soldier distance triggered");
             }
-            
+
 
             if (dist > unitAtkRng)
             {
                 // if (unit.name == "Player Unit 1")
                 // {
-                    Debug.Log(unit.name + " target = " + currentTarget);
-                     Debug.Log("target too far!");
+                Debug.Log(unit.name + " target = " + currentTarget);
+                Debug.Log("target too far!");
                 // }
                 return;
             }
@@ -190,9 +189,9 @@ public class CombatController : MonoBehaviour
                 isAttacking = true;
                 // if (unit.name == "Player Unit 1")
                 // {
-                    Debug.Log(unit.name + " Unit - attackHandler: in attack range, starting attack");
+                Debug.Log(unit.name + " Unit - attackHandler: in attack range, starting attack");
                 // }
-                StartCoroutine(AttackTarget(x, dist));
+                StartCoroutine(AttackTarget(x, dist, t));
                 return;
             }
         }
@@ -201,7 +200,7 @@ public class CombatController : MonoBehaviour
     }
 
 
-    IEnumerator AttackTarget(IDamagable target, float dist)
+    IEnumerator AttackTarget(IDamagable target, float dist, Transform t)
     {
         // Debug.Log("AttackTarget() called");
         while (target != null)
@@ -212,7 +211,7 @@ public class CombatController : MonoBehaviour
                 CState = CombatStateEnum.Moving;
                 // if (unit.name == "Player Unit 1")
                 // {
-                    // Debug.Log(unit.name + " Unit - atk coroutine: !hasTarget - CState = " + CState);
+                // Debug.Log(unit.name + " Unit - atk coroutine: !hasTarget - CState = " + CState);
                 // }
                 hasTarget = false;
                 isAttacking = false;
@@ -227,7 +226,7 @@ public class CombatController : MonoBehaviour
             {
                 // if (unit.name == "Player Unit 1")
                 // {
-                    // Debug.Log(unit.name + " out of range exiting AttackTarget");
+                // Debug.Log(unit.name + " out of range exiting AttackTarget");
                 // }
                 break;
             }
@@ -236,9 +235,20 @@ public class CombatController : MonoBehaviour
                 CState = CombatStateEnum.Fighting;
                 // if (unit.name == "Player Unit 1")
                 // {
-                    // Debug.Log(unit.name + "Unit - atk coroutine: attacking - CState = " + CState);
+                // Debug.Log(unit.name + "Unit - atk coroutine: attacking - CState = " + CState);
                 // }
-                target.TakeDamage(unit.getDmg());
+                if (unit.getUnitType() == UnitEnum.Archer)
+                {
+                    Debug.Log("archer attack heard");
+                    Quaternion SpawnRotation = unit.transform.rotation;
+                    var newArrow = Instantiate(arrowPrefab, unit.GetComponent<Transform>().position, SpawnRotation);
+                    var projectileScript = newArrow.GetComponent<Projectile>();
+                    projectileScript.Initialize(arrowPrefab, t, target, unit);
+                }
+                else
+                {
+                    target.TakeDamage(unit.getDmg());
+                }
                 yield return new WaitForSeconds(unit.getAtkSpd());
             }
         }

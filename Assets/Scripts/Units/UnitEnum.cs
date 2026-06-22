@@ -1,5 +1,6 @@
 public enum UnitEnum
 {
     Soldier,
-    Tank
+    Tank,
+    Archer
 }
