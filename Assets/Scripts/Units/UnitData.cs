@@ -6,13 +6,13 @@ public class UnitData
     public string Name { get; }
     public int GoldCost { get; }
     public int MaxHP { get; }
-    public int Dmg { get; }
+    public float Dmg { get; }
     public float AtkSpd { get; }
     public float MvSpd { get; }
     public float DetectRange { get; }
     public float AtkRange { get; }
 
-    public UnitData(string Name, int GoldCost, int HP, int DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange)
+    public UnitData(string Name, int GoldCost, int HP, float DMG, float AtkSpd, float MvSpd, float DetectRange, float AtkRange)
     {
         this.Name = Name;
         this.GoldCost = GoldCost;

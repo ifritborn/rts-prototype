@@ -17,6 +17,8 @@ public class Spawner : MonoBehaviour
     private Quaternion SpawnRotation;
     private TeamID team;
 
+    private int waveCount = 0;
+
     private Dictionary<UnitEnum, int> armyPool = new Dictionary<UnitEnum, int>();
 
     public int getArmySize()
@@ -39,16 +41,28 @@ public class Spawner : MonoBehaviour
         setupArmyDict();
 
         WM.SpawnerAction += SpawnWave;
+    
     }
 
     // ----------------------------------------------------------------------------------------------------------------
 
     private void setupArmyDict()
     {
-        armyPool.Add(UnitEnum.Soldier, 1);
-        armyPool.Add(UnitEnum.Tank, 1);
-        armyPool.Add(UnitEnum.Archer, 1);
+        if (team == TeamID.Player)
+        {
+            armyPool.Add(UnitEnum.Soldier, 1);
+            armyPool.Add(UnitEnum.Tank, 1);
+            armyPool.Add(UnitEnum.Archer, 1);
+        }
+        else if (team == TeamID.AI)
+        {
+            armyPool.Add(UnitEnum.Soldier, 1);
+            armyPool.Add(UnitEnum.Tank, 1);
+            armyPool.Add(UnitEnum.Archer, 1);
+        }
+
     }
+
 
     public void addUnitToArmy(UnitEnum unit, int num)
     {
@@ -57,7 +71,14 @@ public class Spawner : MonoBehaviour
 
     private void SpawnWave()
     {
+        // waveCount ++;
+        // if (waveCount < 2)
+        // {
+        //     StartCoroutine(SpawnUnit());
+        // }
+
         StartCoroutine(SpawnUnit());
+        
     }
 
 
@@ -86,15 +107,17 @@ public class Spawner : MonoBehaviour
         {
             for (int i = 0; i < unit.Value; i++)
             {
-            float spread = Random.Range(-.5f, .5f);
-            Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);
-            Unit prefab = pickPrefab(unit);
-            var newUnit = Instantiate(prefab, SpreadSpawnPos, SpawnRotation);
-            newUnit.name = $"{team} Unit";
-            var unitScript = newUnit.GetComponent<Unit>();
-            unitScript.Initialize(opposingBase.transform, teamColor, team, unit.Key);
+                float spread = Random.Range(-.5f, .5f);
+                Vector3 SpreadSpawnPos = transform.position + new Vector3(spread, spread, 0);
+                Unit prefab = pickPrefab(unit);
+                var newUnit = Instantiate(prefab, SpreadSpawnPos, SpawnRotation);
+                newUnit.name = $"{team} Unit";
+                var unitScript = newUnit.GetComponent<Unit>();
+                unitScript.Initialize(opposingBase.transform, teamColor, team, unit.Key);
             }
         }
         yield return new WaitForSeconds(.01f);
     }
+
+
 }

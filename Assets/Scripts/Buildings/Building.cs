@@ -6,7 +6,7 @@ public class Building : MonoBehaviour, IDamagable
 
     [SerializeField] private bool isBase;
     [SerializeField] private int maxHp;
-    private int currentHealth;
+    private float currentHealth;
     private TeamID teamID;
     private bool isAlive;
     public event Action BaseIsDead;
@@ -34,7 +34,7 @@ public class Building : MonoBehaviour, IDamagable
     {
         return this.isBase;
     }
-    public int getCurrentHp()
+    public float getCurrentHp()
     {
         return currentHealth;
     }
@@ -70,11 +70,11 @@ public class Building : MonoBehaviour, IDamagable
 
         }
     }
-    public void TakeDamage(int dmgVal)
+    public void TakeDamage(float dmgVal)
     {
 
-        int updatedHp = currentHealth - dmgVal;
-        int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
+        float updatedHp = currentHealth - dmgVal;
+        float hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHealth = hpBounds;
         Debug.Log("Building: taking dmg, hp at " + currentHealth);
 

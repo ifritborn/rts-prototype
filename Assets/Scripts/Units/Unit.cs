@@ -12,13 +12,13 @@ public class Unit : MonoBehaviour, IDamagable
     private CombatController CC;
     private UnitEnum unitType;
     private int maxHp;
-    private int unitDmg;
+    private float unitDmg;
     private float unitMvSpd;
     private float unitAtkSpd;
     private float detectRng;
     private float atkRng;
     private TeamID teamID;
-    private int currentHP;
+    private float currentHP;
     private bool isAlive;
     private bool isBase = false;
 
@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour, IDamagable
         return unitAtkSpd;
     }
 
-    public int getDmg()
+    public float getDmg()
     {
         return unitDmg;
     }
@@ -77,7 +77,7 @@ public class Unit : MonoBehaviour, IDamagable
 
         CC = GetComponent<CombatController>();
         setupUnit();
-        CC.Initialize(this, atkRng);
+        CC.Initialize(this);
 
         // if (this.name == "Player Unit 1")
         // {
@@ -150,11 +150,11 @@ public class Unit : MonoBehaviour, IDamagable
 
 
 
-    public void TakeDamage(int dmgVal)
+    public void TakeDamage(float dmgVal)
     {
 
-        int updatedHp = currentHP - dmgVal;
-        int hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
+        float updatedHp = currentHP - dmgVal;
+        float hpBounds = Mathf.Clamp(updatedHp, 0, maxHp);
         currentHP = hpBounds;
         // Debug.Log(this.name + " Unit: dmg - hp at: " + currentHP);
 

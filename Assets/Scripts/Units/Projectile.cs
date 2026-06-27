@@ -6,13 +6,13 @@ public class Projectile : MonoBehaviour
     private Transform targetPOS;
     private Projectile prefab;
     private IDamagable target;
-    private Unit unit;
-    public void Initialize(Projectile prefab, Transform targetPOS, IDamagable target, Unit unit)
+    private float counterDmg;
+    public void Initialize(Projectile prefab, Transform targetPOS, IDamagable target, float counterDmg)
     {
         this.targetPOS = targetPOS;
         this.prefab = prefab;
         this.target = target;
-        this.unit = unit;
+        this.counterDmg = counterDmg;
 
     }
 
@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
         else
         {
             Debug.Log("archer dmg here");
-            target.TakeDamage(unit.getDmg());
+            target.TakeDamage(counterDmg);
             Destroy(gameObject);
         }
 

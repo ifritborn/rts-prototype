@@ -16,6 +16,13 @@ public class CombatController : MonoBehaviour
     private Transform currentTarget;
     private IDamagable currentDamagable;
     private Unit currentUnitTarget;
+    private float baseDmg;
+    private float counterDmg;
+
+
+    private float strongModifier = 2f;
+
+    private float weakModifier = .5f;
 
 
     public Transform getTargetPOS()
@@ -24,10 +31,11 @@ public class CombatController : MonoBehaviour
     }
 
     // ----------------------------------------------------------------------------------------------------------------
-    public void Initialize(Unit unit, float unitAtkRng)
+    public void Initialize(Unit unit)
     {
         this.unit = unit;
-        this.unitAtkRng = unitAtkRng;
+        this.unitAtkRng = unit.getAtkRng();
+        this.baseDmg = unit.getDmg();
 
         CState = CombatStateEnum.Moving;
 
@@ -89,6 +97,67 @@ public class CombatController : MonoBehaviour
         return CState;
     }
 
+    private float unitCounterSystem(float baseDmg, Unit u)
+    {
+        float counterDmg;
+        switch (unit.getUnitType())
+        {
+            case UnitEnum.Soldier:
+                if (u.getUnitType() == UnitEnum.Archer)
+                {
+                    counterDmg = baseDmg * strongModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else if (u.getUnitType() == UnitEnum.Tank)
+                {
+                    counterDmg = baseDmg * weakModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else
+                {
+                    return baseDmg;
+                }
+            case UnitEnum.Tank:
+                if (u.getUnitType() == UnitEnum.Soldier)
+                {
+                    counterDmg = baseDmg * strongModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else if (u.getUnitType() == UnitEnum.Archer)
+                {
+                    counterDmg = baseDmg * weakModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else
+                {
+                    return baseDmg;
+                }
+            case UnitEnum.Archer:
+                if (u.getUnitType() == UnitEnum.Tank)
+                {
+                    counterDmg = baseDmg * strongModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else if (u.getUnitType() == UnitEnum.Soldier)
+                {
+                    counterDmg = baseDmg * weakModifier;
+                    Debug.Log("counterDmg = " + counterDmg);
+                    return counterDmg;
+                }
+                else
+                {
+                    return baseDmg;
+                }
+            default:
+                return baseDmg;
+        }
+    }
+
     private bool isValidTarget(IDamagable target)
     {
         // if (unit.name == "Player Unit 1" && target.getTeamID() != TeamID.Player)
@@ -132,6 +201,7 @@ public class CombatController : MonoBehaviour
                     currentTarget = t;
                     currentDamagable = x;
                     currentUnitTarget = u;
+                    counterDmg = unitCounterSystem(baseDmg, u);
                     break;
                 }
             }
@@ -158,7 +228,9 @@ public class CombatController : MonoBehaviour
         if (t != null && x != null)
         {
 
+            
             float dist;
+
             if (x.getIsBase() || u.getUnitType() == UnitEnum.Tank)
             {
                 Collider2D collider = t.GetComponent<Collider2D>();
@@ -219,6 +291,7 @@ public class CombatController : MonoBehaviour
                 currentTarget = null;
                 currentDamagable = null;
                 currentUnitTarget = null;
+                counterDmg = baseDmg;
                 break;
 
             }
@@ -243,11 +316,11 @@ public class CombatController : MonoBehaviour
                     Quaternion SpawnRotation = unit.transform.rotation;
                     var newArrow = Instantiate(arrowPrefab, unit.GetComponent<Transform>().position, SpawnRotation);
                     var projectileScript = newArrow.GetComponent<Projectile>();
-                    projectileScript.Initialize(arrowPrefab, t, target, unit);
+                    projectileScript.Initialize(arrowPrefab, t, target, counterDmg);
                 }
                 else
                 {
-                    target.TakeDamage(unit.getDmg());
+                    target.TakeDamage(counterDmg);
                 }
                 yield return new WaitForSeconds(unit.getAtkSpd());
             }
