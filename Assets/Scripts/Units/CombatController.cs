@@ -201,7 +201,6 @@ public class CombatController : MonoBehaviour
                     currentTarget = t;
                     currentDamagable = x;
                     currentUnitTarget = u;
-                    counterDmg = unitCounterSystem(baseDmg, u);
                     break;
                 }
             }
@@ -252,12 +251,16 @@ public class CombatController : MonoBehaviour
                 // if (unit.name == "Player Unit 1")
                 // {
                 Debug.Log(unit.name + " target = " + currentTarget);
-                Debug.Log("target too far!");
+                Debug.Log("tardget too far!");
                 // }
                 return;
             }
             else
             {
+                if (u != null)
+                {
+                    counterDmg = unitCounterSystem(baseDmg, u);
+                }
                 isAttacking = true;
                 // if (unit.name == "Player Unit 1")
                 // {

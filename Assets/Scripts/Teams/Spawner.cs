@@ -50,15 +50,15 @@ public class Spawner : MonoBehaviour
     {
         if (team == TeamID.Player)
         {
-            armyPool.Add(UnitEnum.Soldier, 1);
-            armyPool.Add(UnitEnum.Tank, 1);
+            armyPool.Add(UnitEnum.Soldier, 0);
+            armyPool.Add(UnitEnum.Tank, 0);
             armyPool.Add(UnitEnum.Archer, 1);
         }
         else if (team == TeamID.AI)
         {
             armyPool.Add(UnitEnum.Soldier, 1);
-            armyPool.Add(UnitEnum.Tank, 1);
-            armyPool.Add(UnitEnum.Archer, 1);
+            armyPool.Add(UnitEnum.Tank, 0);
+            armyPool.Add(UnitEnum.Archer, 0);
         }
 
     }
@@ -71,13 +71,13 @@ public class Spawner : MonoBehaviour
 
     private void SpawnWave()
     {
-        // waveCount ++;
-        // if (waveCount < 2)
-        // {
-        //     StartCoroutine(SpawnUnit());
-        // }
+        waveCount ++;
+        if (waveCount < 2)
+        {
+            StartCoroutine(SpawnUnit());
+        }
 
-        StartCoroutine(SpawnUnit());
+        // StartCoroutine(SpawnUnit());
         
     }
 
