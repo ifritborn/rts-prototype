@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,9 +23,11 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private GameObject ghostBuilding;
 
-    Vector3Int currentGridCell;
+    private Vector3Int currentGridCell;
 
-    Vector3Int lastGridCell;
+    private Vector3Int lastGridCell;
+
+    private List<Vector3Int> occupiedCells = new List<Vector3Int>();
 
 
 
@@ -107,12 +110,32 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private bool isValidBuildArea(Vector3Int cell)
     {
-        return PlayerBuildZone.HasTile(cell) ? true : false;
+
+        bool cellValid = true;
+
+        if (PlayerBuildZone.HasTile(cell))
+        {
+            foreach (Vector3Int c in occupiedCells)
+            {
+                Debug.Log("c in list = " + c);
+                if (currentGridCell == c)
+                {
+                    cellValid = false;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            cellValid = false;
+        }
+
+        return cellValid;
     }
 
     private void highlightTile(bool isValidToPlace)
     {
-        TileBase tile; 
+        TileBase tile;
 
         if (isValidToPlace)
         {
@@ -163,8 +186,8 @@ public class BuildingPlacementManager : MonoBehaviour
     private void setGridCells()
     {
         Vector3Int cellNow = getGridCell();
-        
-        if ( cellNow !=  currentGridCell)
+
+        if (cellNow != currentGridCell)
         {
             lastGridCell = currentGridCell;
             currentGridCell = cellNow;
@@ -178,12 +201,11 @@ public class BuildingPlacementManager : MonoBehaviour
 
     private void placeBuilding(GameObject prefab)
     {
-        Debug.Log("2 placing building");
         Vector3 cellCenter = mouseToGridCenter(currentGridCell);
         Quaternion rotation = grid.transform.rotation;
         GameObject newBuilding = Instantiate(prefab, cellCenter, rotation);
+        occupiedCells.Add(currentGridCell);
         adjustTransparency(newBuilding, false);
-
     }
 
     private void adjustTransparency(GameObject building, bool ghost)
