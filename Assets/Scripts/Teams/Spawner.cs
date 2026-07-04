@@ -40,7 +40,7 @@ public class Spawner : MonoBehaviour
 
         setupArmyDict();
 
-        WM.SpawnerAction += SpawnWave;
+        // WM.SpawnerAction += SpawnWave;
     
     }
 
